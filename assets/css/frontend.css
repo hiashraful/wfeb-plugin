@@ -1,0 +1,1222 @@
+/**
+ * WFEB Plugin - Frontend Stylesheet
+ * World Football Examination Board
+ *
+ * Warm Editorial Design System
+ * Sora, navy blue accent, light backgrounds.
+ *
+ * Standalone full-page templates for:
+ *   Coach login, Coach registration, Player login,
+ *   Forgot password, Certificate verification
+ */
+
+/* ==========================================================================
+   1. CSS Custom Properties
+   ========================================================================== */
+
+:root {
+    /* Backgrounds */
+    --wfeb-bg: #FAF8F5;
+    --wfeb-bg-card: #FFFFFF;
+    --wfeb-bg-elevated: #F5F1EC;
+
+    /* Text */
+    --wfeb-text: #1A1714;
+    --wfeb-text-secondary: #6B6560;
+    --wfeb-text-tertiary: #9E9893;
+
+    /* Accent -- Navy Blue */
+    --wfeb-accent: #0056A7;
+    --wfeb-accent-hover: #004485;
+    --wfeb-accent-light: #E8EEF5;
+
+    /* Borders */
+    --wfeb-border: #E8E3DD;
+    --wfeb-border-focus: #0056A7;
+
+    /* Status */
+    --wfeb-success: #3A7D5C;
+    --wfeb-success-light: #EBF5F0;
+    --wfeb-error: #C43E3E;
+    --wfeb-error-light: #FFEBEB;
+    --wfeb-warning: #B8860B;
+    --wfeb-warning-light: #FFF8E1;
+    --wfeb-info: #4A6FA5;
+    --wfeb-info-light: #EEF2F8;
+
+    /* Shadows -- warm tinted */
+    --wfeb-shadow-sm: 0 1px 3px rgba(26, 23, 20, .06);
+    --wfeb-shadow-md: 0 4px 16px rgba(26, 23, 20, .08);
+    --wfeb-shadow-lg: 0 8px 32px rgba(26, 23, 20, .12);
+
+    /* Radius */
+    --wfeb-radius: 12px;
+    --wfeb-radius-lg: 20px;
+
+    /* Typography */
+    --wfeb-font-display: 'Sora', system-ui, sans-serif;
+    --wfeb-font-body: 'Sora', system-ui, sans-serif;
+
+    /* Transitions */
+    --wfeb-transition: 0.25s cubic-bezier(.4, 0, .2, 1);
+}
+
+
+/* ==========================================================================
+   2. Base Reset & Layout
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body.wfeb-page {
+    min-height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-y: auto;
+}
+
+body.wfeb-page {
+    font-family: var(--wfeb-font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--wfeb-text);
+    background: var(--wfeb-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 40px 24px 80px;
+}
+
+/* Override WordPress theme styles on standalone pages */
+body.wfeb-page #wpadminbar {
+    display: none !important;
+}
+
+body.wfeb-page .site-header,
+body.wfeb-page .site-footer,
+body.wfeb-page .wp-site-blocks > header,
+body.wfeb-page .wp-site-blocks > footer {
+    display: none !important;
+}
+
+
+/* ==========================================================================
+   3. Auth Card Container
+   ========================================================================== */
+
+.wfeb-auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 414px;
+    margin: auto;
+    animation: wfeb-fade-in 0.5s ease-out;
+}
+
+/* Logo */
+.wfeb-auth-logo {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.wfeb-auth-logo img {
+    max-height: 120px;
+    width: auto;
+    display: inline-block;
+}
+
+/* Card */
+.wfeb-auth-card {
+    width: 100%;
+    background: var(--wfeb-bg-card);
+    border: 1px solid var(--wfeb-border);
+    border-radius: var(--wfeb-radius-lg);
+    box-shadow: var(--wfeb-shadow-sm);
+    padding: 36px;
+    position: relative;
+}
+
+/* Wide variant for registration */
+.wfeb-auth-card--wide {
+    max-width: 600px;
+}
+
+.wfeb-auth-container:has(.wfeb-auth-card--wide) {
+    max-width: 600px;
+}
+
+/* Title -- Serif display */
+.wfeb-auth-title {
+    text-align: center;
+    font-family: var(--wfeb-font-display);
+    color: var(--wfeb-text);
+    font-weight: 400;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-bottom: 8px;
+}
+
+/* Subtitle */
+.wfeb-auth-subtitle {
+    text-align: center;
+    color: var(--wfeb-text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 28px;
+    line-height: 1.5;
+}
+
+
+/* ==========================================================================
+   4. Form Styles
+   ========================================================================== */
+
+.wfeb-form {
+    width: 100%;
+}
+
+.wfeb-form-group {
+    margin-bottom: 22px;
+}
+
+.wfeb-form-label {
+    display: block;
+    font-weight: 500;
+    color: var(--wfeb-text-secondary);
+    margin-bottom: 6px;
+    font-size: 0.8rem;
+    line-height: 1;
+    letter-spacing: .02em;
+}
+
+.wfeb-form-label .required {
+    color: var(--wfeb-accent);
+    margin-left: 2px;
+}
+
+.wfeb-form-input {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--wfeb-border);
+    border-radius: var(--wfeb-radius);
+    font-size: 0.95rem;
+    font-family: var(--wfeb-font-body);
+    color: var(--wfeb-text);
+    background-color: var(--wfeb-bg-card);
+    transition: border-color var(--wfeb-transition), box-shadow var(--wfeb-transition);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.wfeb-form-input::placeholder {
+    color: var(--wfeb-text-tertiary);
+}
+
+.wfeb-form-input:hover {
+    border-color: var(--wfeb-text-tertiary);
+}
+
+.wfeb-form-input:focus {
+    border-color: var(--wfeb-border-focus);
+    box-shadow: 0 0 0 3px rgba(0, 86, 167, .1);
+    background-color: #FFFFFF;
+}
+
+/* Error state */
+.wfeb-form-input--error,
+.wfeb-form-input--error:hover,
+.wfeb-form-input--error:focus {
+    border-color: var(--wfeb-error);
+    box-shadow: 0 0 0 3px rgba(196, 62, 62, .1);
+}
+
+/* Field-level error from JS */
+.wfeb-field--error {
+    border-color: var(--wfeb-error) !important;
+    box-shadow: 0 0 0 3px rgba(196, 62, 62, .1) !important;
+}
+
+.wfeb-field-error {
+    display: block;
+    color: var(--wfeb-error);
+    font-size: 0.8rem;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+/* Error message */
+.wfeb-form-error {
+    display: block;
+    color: var(--wfeb-error);
+    font-size: 0.8rem;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+/* Hint text */
+.wfeb-form-hint {
+    display: block;
+    color: var(--wfeb-text-tertiary);
+    font-size: 0.75rem;
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+/* Side-by-side fields */
+.wfeb-form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.wfeb-form-row .wfeb-form-group {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Textarea */
+textarea.wfeb-form-input {
+    min-height: 100px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+/* Select */
+select.wfeb-form-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 44px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%236B6560' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+select.wfeb-form-input:focus {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%230056A7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* File Upload / Drag-Drop Zone */
+.wfeb-form-file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+    border: 2px dashed var(--wfeb-border);
+    border-radius: var(--wfeb-radius);
+    background-color: var(--wfeb-bg-elevated);
+    cursor: pointer;
+    transition: border-color var(--wfeb-transition), background-color var(--wfeb-transition);
+    text-align: center;
+    min-height: 120px;
+}
+
+.wfeb-form-file:hover,
+.wfeb-form-file--dragover {
+    border-color: var(--wfeb-accent);
+    background-color: var(--wfeb-accent-light);
+}
+
+.wfeb-form-file__icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 12px;
+    color: var(--wfeb-text-tertiary);
+}
+
+.wfeb-form-file__icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.wfeb-form-file__text {
+    font-size: 0.9rem;
+    color: var(--wfeb-text-secondary);
+    line-height: 1.5;
+}
+
+.wfeb-form-file__text strong {
+    color: var(--wfeb-accent);
+    font-weight: 600;
+}
+
+.wfeb-form-file__hint {
+    font-size: 0.75rem;
+    color: var(--wfeb-text-tertiary);
+    margin-top: 4px;
+}
+
+.wfeb-form-file input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.wfeb-form-file__preview {
+    margin-top: 12px;
+    font-size: 0.8rem;
+    color: var(--wfeb-accent);
+    font-weight: 500;
+}
+
+
+/* ==========================================================================
+   5. Buttons
+   ========================================================================== */
+
+/* Reset WordPress core styles within WFEB pages */
+body.wfeb-page button,
+body.wfeb-page input[type="submit"],
+body.wfeb-page input[type="button"],
+body.wfeb-page .button,
+body.wfeb-page a.button {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    text-decoration: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    min-height: 0 !important;
+}
+
+/* Reset WordPress core input styles */
+body.wfeb-page input[type="text"],
+body.wfeb-page input[type="email"],
+body.wfeb-page input[type="password"],
+body.wfeb-page input[type="tel"],
+body.wfeb-page input[type="url"],
+body.wfeb-page input[type="number"],
+body.wfeb-page input[type="date"],
+body.wfeb-page input[type="search"],
+body.wfeb-page textarea,
+body.wfeb-page select {
+    background-color: var(--wfeb-bg-card) !important;
+    background-image: none !important;
+    border: 1.5px solid var(--wfeb-border) !important;
+    border-radius: var(--wfeb-radius) !important;
+    font-family: var(--wfeb-font-body) !important;
+    font-size: 0.95rem !important;
+    color: var(--wfeb-text) !important;
+    box-shadow: none !important;
+    outline: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+body.wfeb-page select.wfeb-form-input {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%236B6560' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 16px !important;
+}
+
+body.wfeb-page input:focus,
+body.wfeb-page textarea:focus,
+body.wfeb-page select:focus {
+    border-color: var(--wfeb-border-focus) !important;
+    box-shadow: 0 0 0 3px rgba(0, 86, 167, .1) !important;
+    background-color: #FFFFFF !important;
+    outline: none !important;
+}
+
+body.wfeb-page .wfeb-btn,
+.wfeb-auth-card .wfeb-btn,
+.wfeb-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px;
+    padding: 14px 32px !important;
+    border: none !important;
+    border-radius: var(--wfeb-radius) !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    font-family: var(--wfeb-font-body) !important;
+    line-height: 1.4 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: all var(--wfeb-transition);
+    outline: none !important;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    min-height: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    text-indent: 0 !important;
+    text-align: center !important;
+}
+
+.wfeb-btn:focus-visible {
+    box-shadow: 0 0 0 3px rgba(0, 86, 167, .2);
+}
+
+/* Primary -- Navy blue, white text */
+body.wfeb-page .wfeb-btn--primary,
+.wfeb-auth-card .wfeb-btn--primary,
+.wfeb-btn--primary {
+    background: var(--wfeb-accent) !important;
+    background-color: var(--wfeb-accent) !important;
+    color: #FFFFFF !important;
+}
+
+body.wfeb-page .wfeb-btn--primary:hover,
+.wfeb-auth-card .wfeb-btn--primary:hover,
+.wfeb-btn--primary:hover {
+    background: var(--wfeb-accent-hover) !important;
+    background-color: var(--wfeb-accent-hover) !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: var(--wfeb-shadow-md) !important;
+}
+
+.wfeb-btn--primary:active {
+    transform: translateY(0);
+    box-shadow: none !important;
+}
+
+/* Secondary -- Ghost style */
+.wfeb-btn--secondary {
+    background: transparent !important;
+    color: var(--wfeb-text-secondary) !important;
+    border: 1.5px solid var(--wfeb-border) !important;
+}
+
+.wfeb-btn--secondary:hover {
+    border-color: var(--wfeb-text-tertiary) !important;
+    background: var(--wfeb-bg-elevated) !important;
+}
+
+/* Danger */
+.wfeb-btn--danger {
+    background: var(--wfeb-error) !important;
+    color: #FFFFFF !important;
+}
+
+.wfeb-btn--danger:hover {
+    background: #A93333 !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px);
+    box-shadow: var(--wfeb-shadow-md) !important;
+}
+
+.wfeb-btn--danger:active {
+    transform: translateY(0);
+    box-shadow: none !important;
+}
+
+/* Full width */
+body.wfeb-page .wfeb-btn--full,
+.wfeb-auth-card .wfeb-btn--full,
+.wfeb-btn--full {
+    width: 100% !important;
+}
+
+/* Disabled state */
+.wfeb-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.wfeb-btn--loading {
+    opacity: 1;
+    cursor: not-allowed;
+    pointer-events: none;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Loading spinner — iOS-style 12-blade (CSS keyframe) */
+.wfeb-btn--loading {
+    position: relative;
+    color: transparent !important;
+}
+
+.wfeb-btn--loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: none;
+    border-radius: 50%;
+    background: conic-gradient(transparent 0%, #FFFFFF 100%);
+    -webkit-mask: radial-gradient(transparent 38%, #000 40%);
+    mask: radial-gradient(transparent 38%, #000 40%);
+    animation: wfeb-spin 0.85s steps(12) infinite;
+}
+
+.wfeb-btn--secondary.wfeb-btn--loading::after,
+.wfeb-btn--outline.wfeb-btn--loading::after,
+.wfeb-btn--ghost.wfeb-btn--loading::after {
+    background: conic-gradient(transparent 0%, var(--wfeb-text, #1a1714) 100%);
+}
+
+
+/* ==========================================================================
+   6. Password Field with Toggle
+   ========================================================================== */
+
+.wfeb-password-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.wfeb-password-wrap .wfeb-form-input {
+    padding-right: 48px;
+    width: 100%;
+}
+
+body.wfeb-page .wfeb-password-toggle,
+.wfeb-password-wrap .wfeb-password-toggle,
+.wfeb-password-toggle {
+    position: absolute !important;
+    top: 50% !important;
+    right: 12px !important;
+    transform: translateY(-50%) !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer !important;
+    color: var(--wfeb-text-tertiary) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 4px !important;
+    transition: color var(--wfeb-transition);
+}
+
+.wfeb-password-toggle:hover {
+    color: var(--wfeb-accent);
+}
+
+.wfeb-password-toggle svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.wfeb-password-toggle .wfeb-eye-slash {
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.wfeb-password-toggle[aria-pressed="true"] .wfeb-eye-slash {
+    opacity: 1;
+}
+
+
+/* ==========================================================================
+   7. Custom Checkbox
+   ========================================================================== */
+
+.wfeb-checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    position: relative;
+    line-height: 1.5;
+}
+
+.wfeb-checkbox-group input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+
+.wfeb-checkbox-group .wfeb-checkbox-mark {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--wfeb-border);
+    border-radius: 5px;
+    background: var(--wfeb-bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--wfeb-transition);
+    margin-top: 2px;
+}
+
+.wfeb-checkbox-group input[type="checkbox"]:checked + .wfeb-checkbox-mark {
+    background-color: var(--wfeb-accent);
+    border-color: var(--wfeb-accent);
+}
+
+.wfeb-checkbox-group input[type="checkbox"]:checked + .wfeb-checkbox-mark::after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 10px;
+    border: solid #FFFFFF;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-top: -2px;
+}
+
+.wfeb-checkbox-group input[type="checkbox"]:focus-visible + .wfeb-checkbox-mark {
+    box-shadow: 0 0 0 3px rgba(0, 86, 167, .15);
+}
+
+.wfeb-checkbox-group .wfeb-checkbox-label {
+    font-size: 0.85rem;
+    color: var(--wfeb-text-secondary);
+    user-select: none;
+}
+
+.wfeb-checkbox-group .wfeb-checkbox-label a {
+    color: var(--wfeb-accent);
+    text-decoration: none;
+}
+
+.wfeb-checkbox-group .wfeb-checkbox-label a:hover {
+    text-decoration: underline;
+}
+
+
+/* ==========================================================================
+   8. Alert / Notice
+   ========================================================================== */
+
+.wfeb-notice {
+    padding: 14px 18px;
+    border-radius: var(--wfeb-radius);
+    border: 1px solid var(--wfeb-border);
+    background-color: var(--wfeb-bg-elevated);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.wfeb-notice p {
+    margin: 0;
+}
+
+/* Success */
+.wfeb-notice--success {
+    border-color: var(--wfeb-success);
+    background-color: var(--wfeb-success-light);
+    color: #1A5C3A;
+}
+
+/* Warning */
+.wfeb-notice--warning {
+    border-color: var(--wfeb-warning);
+    background-color: var(--wfeb-warning-light);
+    color: #6B4E00;
+}
+
+/* Error */
+.wfeb-notice--error {
+    border-color: var(--wfeb-error);
+    background-color: var(--wfeb-error-light);
+    color: #8B1A1A;
+}
+
+/* Info */
+.wfeb-notice--info {
+    border-color: var(--wfeb-info);
+    background-color: var(--wfeb-info-light);
+    color: #2A4A72;
+}
+
+
+/* ==========================================================================
+   9. Auth Links
+   ========================================================================== */
+
+.wfeb-auth-links {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--wfeb-text-secondary);
+}
+
+.wfeb-auth-links a {
+    color: var(--wfeb-accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--wfeb-transition);
+}
+
+.wfeb-auth-links a:hover {
+    color: var(--wfeb-accent-hover);
+    text-decoration: underline;
+}
+
+/* Divider between links */
+.wfeb-auth-links__divider {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    background: var(--wfeb-border);
+    border-radius: 50%;
+    vertical-align: middle;
+    margin: 0 10px;
+}
+
+
+/* ==========================================================================
+   10. Certificate Verification
+   ========================================================================== */
+
+.wfeb-verify-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto;
+    animation: wfeb-fade-in 0.5s ease-out;
+}
+
+/* Result card */
+.wfeb-verify-result {
+    width: 100%;
+    background: var(--wfeb-bg-card);
+    border: 1px solid var(--wfeb-border);
+    border-radius: var(--wfeb-radius-lg);
+    box-shadow: var(--wfeb-shadow-sm);
+    padding: 32px;
+    margin-top: 24px;
+    animation: wfeb-fade-in 0.4s ease-out;
+}
+
+/* Found (valid certificate) */
+.wfeb-verify-result--found {
+    border-color: var(--wfeb-success);
+}
+
+.wfeb-verify-result--found::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    background: var(--wfeb-success);
+    border-radius: 50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3E%3Cpath d='M5 13l4 4L19 7' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px;
+}
+
+/* Not found (invalid certificate) */
+.wfeb-verify-result--not-found {
+    border-color: var(--wfeb-error);
+}
+
+.wfeb-verify-result--not-found::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    background: var(--wfeb-error);
+    border-radius: 50%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'%3E%3Cpath d='M18 6L6 18M6 6l12 12' stroke='%23FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px;
+}
+
+/* Label/Value pairs */
+.wfeb-verify-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--wfeb-bg-elevated);
+    gap: 16px;
+}
+
+.wfeb-verify-field:last-child {
+    border-bottom: none;
+}
+
+.wfeb-verify-field__label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--wfeb-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    flex-shrink: 0;
+}
+
+.wfeb-verify-field__value {
+    font-size: 0.95rem;
+    color: var(--wfeb-text);
+    font-weight: 500;
+    text-align: right;
+}
+
+/* Achievement Level Badge */
+.wfeb-verify-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wfeb-verify-badge--bronze {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #E8CDAC;
+}
+
+.wfeb-verify-badge--silver {
+    background: #F5F1EC;
+    color: #6B6560;
+    border: 1px solid var(--wfeb-border);
+}
+
+.wfeb-verify-badge--gold {
+    background: #FEF3C7;
+    color: #78350F;
+    border: 1px solid #E8CDAC;
+}
+
+.wfeb-verify-badge--platinum {
+    background: var(--wfeb-bg-elevated);
+    color: var(--wfeb-text);
+    border: 1px solid var(--wfeb-border);
+}
+
+.wfeb-verify-badge--elite,
+.wfeb-verify-badge--mastery {
+    background: var(--wfeb-accent-light);
+    color: var(--wfeb-accent);
+    border: 1px solid var(--wfeb-accent);
+}
+
+.wfeb-verify-badge--diamond {
+    background: #F0F7FF;
+    color: #3A6B9F;
+    border: 1px solid #A8C8E8;
+}
+
+/* Verification status heading */
+.wfeb-verify-result__title {
+    text-align: center;
+    font-family: var(--wfeb-font-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.wfeb-verify-result--found .wfeb-verify-result__title {
+    color: var(--wfeb-success);
+}
+
+.wfeb-verify-result--not-found .wfeb-verify-result__title {
+    color: var(--wfeb-error);
+}
+
+
+/* ==========================================================================
+   11. Spinner / Loading
+   ========================================================================== */
+
+.wfeb-spinner {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--wfeb-border);
+    border-top-color: var(--wfeb-accent);
+    border-radius: 50%;
+    animation: wfeb-spin 0.7s linear infinite;
+}
+
+.wfeb-spinner--sm {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+}
+
+.wfeb-spinner--lg {
+    width: 48px;
+    height: 48px;
+    border-width: 4px;
+}
+
+.wfeb-spinner-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+
+/* ==========================================================================
+   12. Utility Classes
+   ========================================================================== */
+
+.wfeb-text-center {
+    text-align: center;
+}
+
+.wfeb-text-muted {
+    color: var(--wfeb-text-secondary);
+}
+
+.wfeb-mt-0 { margin-top: 0; }
+.wfeb-mt-8 { margin-top: 8px; }
+.wfeb-mt-16 { margin-top: 16px; }
+.wfeb-mt-24 { margin-top: 24px; }
+.wfeb-mb-0 { margin-bottom: 0; }
+.wfeb-mb-8 { margin-bottom: 8px; }
+.wfeb-mb-16 { margin-bottom: 16px; }
+.wfeb-mb-24 { margin-bottom: 24px; }
+
+.wfeb-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+
+/* ==========================================================================
+   13. Animations
+   ========================================================================== */
+
+@keyframes wfeb-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes wfeb-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* ==========================================================================
+   13b. Success Modal
+   ========================================================================== */
+
+.wfeb-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 23, 20, 0.5);
+    z-index: 99999;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.wfeb-modal-overlay--visible {
+    opacity: 1;
+}
+
+.wfeb-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: var(--wfeb-bg-card);
+    border-radius: var(--wfeb-radius-lg);
+    box-shadow: var(--wfeb-shadow-lg);
+    padding: 40px 36px 32px;
+    z-index: 100000;
+    width: 90%;
+    max-width: 380px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.wfeb-modal--visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.wfeb-modal-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 20px;
+    background: var(--wfeb-success-light);
+    color: var(--wfeb-success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.wfeb-modal-title {
+    font-family: var(--wfeb-font-display);
+    font-size: 1.25rem;
+    color: var(--wfeb-text);
+    margin-bottom: 12px;
+}
+
+.wfeb-modal-text {
+    font-size: 0.9rem;
+    color: var(--wfeb-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.wfeb-modal .wfeb-modal-ok {
+    margin-top: 0;
+}
+
+
+/* ==========================================================================
+   14. Responsive
+   ========================================================================== */
+
+@media screen and (max-width: 600px) {
+    body.wfeb-page {
+        padding: 24px 16px 60px;
+    }
+
+    .wfeb-auth-card {
+        padding: 28px 20px;
+        border-radius: 16px;
+    }
+
+    .wfeb-auth-title {
+        font-size: 1.5rem;
+    }
+
+    .wfeb-auth-subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+    }
+
+    .wfeb-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .wfeb-form-input {
+        padding: 10px 14px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+
+    .wfeb-btn {
+        padding: 12px 24px;
+    }
+
+    .wfeb-verify-result {
+        padding: 24px 18px;
+    }
+
+    .wfeb-verify-field {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .wfeb-verify-field__value {
+        text-align: left;
+    }
+
+    .wfeb-auth-logo img {
+        max-height: 90px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .wfeb-auth-card {
+        padding: 24px 16px;
+    }
+}
+
+
+/* ==========================================================================
+   15. Print Styles
+   ========================================================================== */
+
+@media print {
+    body.wfeb-page {
+        background: #FFFFFF;
+        padding: 20px;
+    }
+
+    .wfeb-auth-card,
+    .wfeb-verify-result {
+        box-shadow: none;
+        border: 1px solid #CCC;
+    }
+
+    .wfeb-btn,
+    .wfeb-auth-links {
+        display: none;
+    }
+}

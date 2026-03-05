@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WFEB Plugin - Complete User Guide</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Inter', Arial, sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #1a1a2e;
+        background: #f8f9fa;
+        padding: 0;
+    }
+
+    .cover {
+        background: #0056A7;
+        color: #ffffff;
+        padding: 80px 40px;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .cover h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+
+    .cover .subtitle {
+        font-size: 1.1rem;
+        opacity: 0.85;
+        margin-bottom: 24px;
+    }
+
+    .cover .meta {
+        font-size: 0.85rem;
+        opacity: 0.6;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 24px 80px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #0056A7;
+        margin: 48px 0 16px;
+        padding-bottom: 8px;
+        border-bottom: 3px solid #0056A7;
+    }
+
+    h3 {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #0056A7;
+        margin: 32px 0 12px;
+    }
+
+    h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        margin: 20px 0 8px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    a {
+        color: #0056A7;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+
+    .url-box {
+        display: block;
+        background: #e8eef5;
+        border-left: 4px solid #0056A7;
+        padding: 12px 16px;
+        margin: 12px 0 16px;
+        border-radius: 0 8px 8px 0;
+        font-family: monospace;
+        font-size: 0.9rem;
+        word-break: break-all;
+    }
+
+    .url-box a {
+        text-decoration: none;
+        color: #0056A7;
+    }
+
+    .tip {
+        background: #fff8e1;
+        border-left: 4px solid #f59e0b;
+        padding: 14px 18px;
+        margin: 16px 0;
+        border-radius: 0 8px 8px 0;
+        font-size: 0.9rem;
+    }
+
+    .tip strong { color: #92400e; }
+
+    .important {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 14px 18px;
+        margin: 16px 0;
+        border-radius: 0 8px 8px 0;
+        font-size: 0.9rem;
+    }
+
+    .important strong { color: #991b1b; }
+
+    .info {
+        background: #eff6ff;
+        border-left: 4px solid #3b82f6;
+        padding: 14px 18px;
+        margin: 16px 0;
+        border-radius: 0 8px 8px 0;
+        font-size: 0.9rem;
+    }
+
+    .info strong { color: #1e40af; }
+
+    ol, ul {
+        margin: 8px 0 16px 24px;
+    }
+
+    li {
+        margin-bottom: 6px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0 24px;
+        font-size: 0.9rem;
+    }
+
+    th {
+        background: #0056A7;
+        color: #fff;
+        padding: 10px 14px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    tr:nth-child(even) td { background: #f8f9fa; }
+
+    .step-number {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        background: #0056A7;
+        color: #fff;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 28px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-right: 8px;
+    }
+
+    .toc {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 24px 32px;
+        margin: 24px 0 40px;
+    }
+
+    .toc h3 {
+        margin-top: 0;
+        font-size: 1.1rem;
+    }
+
+    .toc ol { margin-left: 20px; }
+    .toc li { margin-bottom: 4px; }
+    .toc a { text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .section-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 20px 24px;
+        margin: 16px 0;
+    }
+
+    .section-card h4 {
+        margin-top: 0;
+        color: #0056A7;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #e5e7eb;
+        margin: 32px 0;
+    }
+
+    .tag-implemented {
+        display: inline-block;
+        background: #dcfce7;
+        color: #166534;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+        margin-left: 6px;
+    }
+
+    .tag-not-implemented {
+        display: inline-block;
+        background: #fee2e2;
+        color: #991b1b;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+        margin-left: 6px;
+    }
+
+    .not-impl-card {
+        background: #fefce8;
+        border: 1px dashed #d4a843;
+    }
+
+    @media print {
+        body { background: #fff; font-size: 12pt; }
+        .cover { padding: 40px 20px; }
+        .container { padding: 0 20px 40px; }
+        h2 { page-break-before: always; }
+        .url-box { background: #f0f0f0; }
+    }
+</style>
+</head>
+<body>
+
+<!-- ========== COVER ========== -->
+<div class="cover">
+    <h1>WFEB Plugin</h1>
+    <p class="subtitle">World Football Examination Board<br>Complete User Guide</p>
+    <p class="meta">Website: footballexams.com &nbsp;|&nbsp; Version 2.2.0 &nbsp;|&nbsp; February 2026</p>
+</div>
+
+<div class="container">
+
+<!-- ========== LEGEND ========== -->
+<div style="background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 24px; margin-bottom: 24px;">
+    <h4 style="margin-top: 0;">Status Legend</h4>
+    <p style="margin-bottom: 4px;"><span class="tag-implemented">Implemented</span> &mdash; This feature is live and working on the website.</p>
+    <p style="margin-bottom: 0;"><span class="tag-not-implemented">Not Implemented</span> &mdash; This feature is planned and will be built in a future update.</p>
+</div>
+
+<!-- ========== TABLE OF CONTENTS ========== -->
+<div class="toc">
+    <h3>Table of Contents</h3>
+    <ol>
+        <li><a href="#overview">What Is This Plugin?</a></li>
+        <li><a href="#all-pages">All Website Pages (Quick Links)</a></li>
+        <li><a href="#admin">The Admin Dashboard (Control Panel)</a></li>
+        <li><a href="#coach-reg">How a Coach Registers</a></li>
+        <li><a href="#coach-approval">Approving or Rejecting a Coach</a></li>
+        <li><a href="#coach-dashboard">The Coach Dashboard</a></li>
+        <li><a href="#adding-player">How a Coach Adds a Player</a></li>
+        <li><a href="#conducting-exam">How a Coach Conducts an Exam</a></li>
+        <li><a href="#scoring">How Scoring Works</a></li>
+        <li><a href="#certificates">Certificates &amp; Credits</a></li>
+        <li><a href="#buying-credits">How Coaches Buy Credits</a></li>
+        <li><a href="#player-dashboard">The Player Dashboard</a></li>
+        <li><a href="#verify-cert">How Anyone Can Verify a Certificate</a></li>
+        <li><a href="#emails">Email Notifications</a></li>
+        <li><a href="#settings">Plugin Settings</a></li>
+        <li><a href="#faq">Common Questions</a></li>
+    </ol>
+</div>
+
+<!-- ========== 1. OVERVIEW ========== -->
+<h2 id="overview">1. What Is This Plugin?</h2>
+
+<p>The WFEB plugin turns <strong>footballexams.com</strong> into a football skills certification platform. Here is what it does in simple terms:</p>
+
+<ul>
+    <li><strong>Coaches</strong> sign up on the website, get approved by the admin, and then can test players on their football skills.</li>
+    <li><strong>Players</strong> are added by their coach. They get tested on 7 different football skills (passing, shooting, sprinting, etc.).</li>
+    <li>After a test, the player receives a <strong>certificate</strong> with their score and achievement level (Bronze, Silver, Gold, etc.).</li>
+    <li>Coaches need to <strong>buy credits</strong> to issue certificates. 1 credit = 1 certificate.</li>
+    <li>Anyone in the world can <strong>verify a certificate</strong> is real by checking it on the website.</li>
+</ul>
+
+<p>There are three separate dashboards:</p>
+<ol>
+    <li><strong>Admin Dashboard</strong> &mdash; The admin manages everything from here.</li>
+    <li><strong>Coach Dashboard</strong> &mdash; Where coaches manage their players and conduct exams.</li>
+    <li><strong>Player Dashboard</strong> &mdash; Where players view their certificates and scores.</li>
+</ol>
+
+
+<!-- ========== 2. ALL PAGES ========== -->
+<h2 id="all-pages">2. All Website Pages (Quick Links)</h2>
+
+<p>Here is every page on the website and what it does. Click any link to go directly to that page.</p>
+
+<h3>Public Pages (Anyone Can See These)</h3>
+
+<div class="section-card">
+    <h4>Coach Login <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-login/">https://footballexams.com/coach-login/</a></div>
+    <p>This is where coaches type in their email and password to log in. There is a link to reset a forgotten password and a link to register as a new coach.</p>
+</div>
+
+<div class="section-card">
+    <h4>Coach Registration <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-registration/">https://footballexams.com/coach-registration/</a></div>
+    <p>The sign-up page for new coaches. They fill in their name, date of birth, email, phone, address, NGB licence number, upload their coaching certificate (a photo or PDF), and create a password. After submitting, the application goes to the admin for approval.</p>
+</div>
+
+<div class="section-card">
+    <h4>Player Login <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/player-login/">https://footballexams.com/player-login/</a></div>
+    <p>Where players log in. Players do <em>not</em> register themselves &mdash; their coach creates their account. The player receives an email with login details.</p>
+</div>
+
+<div class="section-card">
+    <h4>Forgot Password <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/forgot-password/">https://footballexams.com/forgot-password/</a></div>
+    <p>If a coach or player has forgotten their password, they enter their email address here and receive a reset link by email. The link expires after 24 hours.</p>
+</div>
+
+<div class="section-card">
+    <h4>Verify a Certificate <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/verify-certificate/">https://footballexams.com/verify-certificate/</a></div>
+    <p>Anyone (an employer, a club, a parent) can check if a certificate is genuine. They type in the player's name, the certificate number (e.g. WFEB-1000), and the player's date of birth. The website will confirm whether the certificate is real and show the details.</p>
+</div>
+
+<h3>Private Dashboards (Login Required)</h3>
+
+<div class="section-card">
+    <h4>Coach Dashboard <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-dashboard/">https://footballexams.com/coach-dashboard/</a></div>
+    <p>After a coach logs in, they land here. This is their control panel for managing players, conducting exams, viewing certificates, and buying credits. (See <a href="#coach-dashboard">Section 6</a> for full details.)</p>
+</div>
+
+<div class="section-card">
+    <h4>Player Dashboard <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/player-dashboard/">https://footballexams.com/player-dashboard/</a></div>
+    <p>After a player logs in, they land here. They can see their certificates, exam scores, and update their profile. (See <a href="#player-dashboard">Section 12</a> for full details.)</p>
+</div>
+
+<div class="section-card">
+    <h4>Admin Dashboard (WordPress) <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/wp-admin/">https://footballexams.com/wp-admin/</a></div>
+    <p>The WordPress admin area. After logging in with the admin account, the WFEB menu appears in the left sidebar. (See <a href="#admin">Section 3</a> for full details.)</p>
+</div>
+
+
+<!-- ========== 3. ADMIN DASHBOARD ========== -->
+<h2 id="admin">3. The Admin Dashboard (Control Panel)</h2>
+
+<p>Log in to the WordPress admin area:</p>
+<div class="url-box"><a href="https://footballexams.com/wp-admin/">https://footballexams.com/wp-admin/</a></div>
+
+<p>Once logged in, look at the left sidebar. There is a menu item called <strong>WFEB</strong>. Clicking it shows these sub-pages:</p>
+
+<div class="section-card">
+    <h4>Dashboard (Overview) <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-dashboard">https://footballexams.com/wp-admin/admin.php?page=wfeb-dashboard</a></div>
+    <p>The main overview showing at a glance:</p>
+    <ul>
+        <li>Total number of coaches (and how many are waiting for approval)</li>
+        <li>Total number of players</li>
+        <li>Total number of exams conducted</li>
+        <li>Total certificates issued</li>
+        <li>Recent activity</li>
+    </ul>
+    <div class="tip"><strong>Tip:</strong> If there are coaches waiting for approval, an alert appears here. This page should be checked regularly.</div>
+</div>
+
+<div class="section-card">
+    <h4>Coaches <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-coaches">https://footballexams.com/wp-admin/admin.php?page=wfeb-coaches</a></div>
+    <p>Where all coaches are managed. The admin can:</p>
+    <ul>
+        <li>See a list of all coaches with their name, email, status, and registration date</li>
+        <li>Filter by status: <strong>Pending</strong>, <strong>Approved</strong>, or <strong>Rejected</strong></li>
+        <li>Search for a specific coach by name or email</li>
+        <li>Click on a coach's name to see their full details</li>
+        <li>Approve or reject a coach (see <a href="#coach-approval">Section 5</a>)</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>Players <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-players">https://footballexams.com/wp-admin/admin.php?page=wfeb-players</a></div>
+    <p>View all players in the system. Shows which coach manages each player, the player's email, date of birth, and how many certificates they have.</p>
+</div>
+
+<div class="section-card">
+    <h4>Exams <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-exams">https://footballexams.com/wp-admin/admin.php?page=wfeb-exams</a></div>
+    <p>View every exam that has been conducted. Can be filtered by coach, by date, or by status (draft vs. completed). Click on any exam to see the full breakdown of scores.</p>
+</div>
+
+<div class="section-card">
+    <h4>Certificates <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-certificates">https://footballexams.com/wp-admin/admin.php?page=wfeb-certificates</a></div>
+    <p>View all certificates ever issued. The admin can:</p>
+    <ul>
+        <li>Search by certificate number (e.g. WFEB-1000)</li>
+        <li>Filter by achievement level (Bronze, Gold, etc.)</li>
+        <li><strong>Revoke</strong> a certificate if needed (e.g. fraud or a mistake). A reason must be provided. A revoked certificate will fail verification.</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>Analytics <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-analytics">https://footballexams.com/wp-admin/admin.php?page=wfeb-analytics</a></div>
+    <p>Charts and statistics about the platform:</p>
+    <ul>
+        <li>Coaches, players, exams, and certificates totals</li>
+        <li>Score distribution (how players are performing overall)</li>
+        <li>Achievement level breakdown</li>
+        <li>Most active coaches</li>
+        <li>Top-scoring players</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>Settings <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-settings">https://footballexams.com/wp-admin/admin.php?page=wfeb-settings</a></div>
+    <p>Configure how the plugin works. (See <a href="#settings">Section 15</a> for full details.)</p>
+</div>
+
+
+<!-- ========== 4. COACH REGISTRATION ========== -->
+<h2 id="coach-reg">4. How a Coach Registers <span class="tag-implemented">Implemented</span></h2>
+
+<p>When a new coach wants to join the platform, here is what happens step by step:</p>
+
+<p><span class="step-number">1</span> <strong>The coach visits the registration page:</strong></p>
+<div class="url-box"><a href="https://footballexams.com/coach-registration/">https://footballexams.com/coach-registration/</a></div>
+
+<p><span class="step-number">2</span> <strong>They fill in the form with:</strong></p>
+<ul>
+    <li>Full Name</li>
+    <li>Date of Birth</li>
+    <li>Email Address</li>
+    <li>Phone Number</li>
+    <li>Address</li>
+    <li>NGB Number (coaching licence number from their national governing body)</li>
+    <li>Coaching Certificate (upload a photo or PDF of the coaching qualification)</li>
+    <li>Password (at least 8 characters)</li>
+    <li>Tick the box to agree to the terms</li>
+</ul>
+
+<p><span class="step-number">3</span> <strong>They click "Register".</strong> The system creates their account but marks it as <strong>"Pending"</strong>. They cannot log in yet.</p>
+
+<p><span class="step-number">4</span> <strong>The admin receives a notification.</strong> The admin goes to the admin panel and approves or rejects the coach (see next section).</p>
+
+<p><span class="step-number">5</span> <strong>Once approved,</strong> the coach receives an email saying they can now log in.</p>
+
+<div class="important"><strong>Important:</strong> Coaches cannot do anything until the admin approves them. This protects the platform from unqualified people.</div>
+
+
+<!-- ========== 5. APPROVING COACHES ========== -->
+<h2 id="coach-approval">5. Approving or Rejecting a Coach <span class="tag-implemented">Implemented</span></h2>
+
+<p>When a new coach registers, the admin needs to review and approve them. Here is how:</p>
+
+<p><span class="step-number">1</span> Go to the admin area and click <strong>WFEB &rarr; Coaches</strong>:</p>
+<div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-coaches">https://footballexams.com/wp-admin/admin.php?page=wfeb-coaches</a></div>
+
+<p><span class="step-number">2</span> Look for coaches with status <strong>"Pending"</strong> (shown in yellow/orange).</p>
+
+<p><span class="step-number">3</span> Click on the coach's name to open their profile.</p>
+
+<p><span class="step-number">4</span> Review their details:</p>
+<ul>
+    <li>Check name and contact details</li>
+    <li>Look at the NGB number (can be verified externally)</li>
+    <li>View the uploaded coaching certificate document</li>
+</ul>
+
+<p><span class="step-number">5</span> Make a decision:</p>
+<ul>
+    <li><strong>To approve:</strong> Click the <strong>"Approve"</strong> button. The coach receives an email and can now log in.</li>
+    <li><strong>To reject:</strong> Type in a reason (e.g. "Certificate expired") and click <strong>"Reject"</strong>. The coach receives an email explaining why.</li>
+</ul>
+
+<div class="tip"><strong>Tip:</strong> An approved coach can also be suspended later if needed. Go to their profile and change the status.</div>
+
+
+<!-- ========== 6. COACH DASHBOARD ========== -->
+<h2 id="coach-dashboard">6. The Coach Dashboard <span class="tag-implemented">Implemented</span></h2>
+
+<p>After a coach logs in at <a href="https://footballexams.com/coach-login/">https://footballexams.com/coach-login/</a>, they arrive at their dashboard:</p>
+<div class="url-box"><a href="https://footballexams.com/coach-dashboard/">https://footballexams.com/coach-dashboard/</a></div>
+
+<p>The dashboard has a <strong>sidebar menu</strong> on the left with these sections:</p>
+
+<div class="section-card">
+    <h4>Overview <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=overview">https://footballexams.com/coach-dashboard/?section=overview</a></div>
+    <p>The home screen showing a summary of everything:</p>
+    <ul>
+        <li>How many players the coach has</li>
+        <li>How many exams have been conducted</li>
+        <li>How many certificates have been issued</li>
+        <li>Current credit balance</li>
+        <li>List of recent exams</li>
+        <li>Performance charts</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>My Players <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=my-players">https://footballexams.com/coach-dashboard/?section=my-players</a></div>
+    <p>A list of all players this coach has added. From here, the coach can:</p>
+    <ul>
+        <li>See all players' names, emails, and join dates</li>
+        <li>Search for a specific player</li>
+        <li>Click <strong>"Add New Player"</strong> to create a new player (see <a href="#adding-player">Section 7</a>)</li>
+        <li>Click on a player to see their full details and exam history</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>Conduct Exam <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=conduct-exam">https://footballexams.com/coach-dashboard/?section=conduct-exam</a></div>
+    <p>Where the coach starts a new football skills exam. They select a player, enter the exam date, and fill in scores for all 7 skill categories. (See <a href="#conducting-exam">Section 8</a> for the full walkthrough.)</p>
+</div>
+
+<div class="section-card">
+    <h4>Exam History <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=exam-history">https://footballexams.com/coach-dashboard/?section=exam-history</a></div>
+    <p>A list of every exam this coach has done, showing:</p>
+    <ul>
+        <li>Player name</li>
+        <li>Exam date</li>
+        <li>Total score (out of 80)</li>
+        <li>Achievement level (Bronze, Gold, etc.)</li>
+        <li>Status: <strong>Draft</strong> (not yet finalised) or <strong>Completed</strong></li>
+    </ul>
+    <p>Click on any exam to see the full score breakdown, or continue editing a draft exam.</p>
+</div>
+
+<div class="section-card not-impl-card">
+    <h4>Certificate Credits <span class="tag-not-implemented">Not Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=credits">https://footballexams.com/coach-dashboard/?section=credits</a></div>
+    <p>Will show the coach's current credit balance, transaction history, and a button to buy more credits. This will be implemented using a custom checkout with WooCommerce and Stripe.</p>
+</div>
+
+<div class="section-card">
+    <h4>Settings (Coach Profile) <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=settings">https://footballexams.com/coach-dashboard/?section=settings</a></div>
+    <p>The coach can update their own details here:</p>
+    <ul>
+        <li>Change profile picture</li>
+        <li>Update name, phone, address</li>
+        <li>Change password</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>Documentation / Help <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=documentation">https://footballexams.com/coach-dashboard/?section=documentation</a></div>
+    <p>A help section with instructions on how to use the dashboard, how scoring works, and FAQs.</p>
+</div>
+
+
+<!-- ========== 7. ADDING A PLAYER ========== -->
+<h2 id="adding-player">7. How a Coach Adds a Player <span class="tag-implemented">Implemented</span></h2>
+
+<p>Players do not register themselves. A coach creates their account. Here is how:</p>
+
+<p><span class="step-number">1</span> The coach goes to <strong>My Players</strong> in the dashboard:</p>
+<div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=my-players">https://footballexams.com/coach-dashboard/?section=my-players</a></div>
+
+<p><span class="step-number">2</span> They click the <strong>"Add New Player"</strong> button.</p>
+
+<p><span class="step-number">3</span> A form pops up asking for:</p>
+<ul>
+    <li>Player's full name</li>
+    <li>Player's date of birth</li>
+    <li>Player's email address</li>
+</ul>
+
+<p><span class="step-number">4</span> They click <strong>"Save"</strong>.</p>
+
+<p><span class="step-number">5</span> The system automatically:</p>
+<ul>
+    <li>Creates a login account for the player</li>
+    <li>Generates a temporary password</li>
+    <li>Sends the player a welcome email with login details</li>
+</ul>
+
+<p>The player can now log in at <a href="https://footballexams.com/player-login/">https://footballexams.com/player-login/</a> using the email and temporary password from the email.</p>
+
+<div class="tip"><strong>Tip:</strong> Coaches should make sure they use the player's correct email address, because the login details are sent there.</div>
+
+
+<!-- ========== 8. CONDUCTING AN EXAM ========== -->
+<h2 id="conducting-exam">8. How a Coach Conducts an Exam <span class="tag-implemented">Implemented</span></h2>
+
+<p>Once a coach has added players and has credits, they can conduct an exam:</p>
+
+<p><span class="step-number">1</span> The coach goes to <strong>Conduct Exam</strong> in the dashboard:</p>
+<div class="url-box"><a href="https://footballexams.com/coach-dashboard/?section=conduct-exam">https://footballexams.com/coach-dashboard/?section=conduct-exam</a></div>
+
+<p><span class="step-number">2</span> Select the <strong>player</strong> from a dropdown list.</p>
+
+<p><span class="step-number">3</span> Enter the <strong>exam date</strong>.</p>
+
+<p><span class="step-number">4</span> Optionally add an <strong>assistant examiner</strong> name.</p>
+
+<p><span class="step-number">5</span> Fill in the scores for all <strong>7 categories</strong> (see <a href="#scoring">Section 9</a> for details):</p>
+<ol>
+    <li><strong>Short Passing</strong> &mdash; Left foot and right foot (0-5 each)</li>
+    <li><strong>Long Passing</strong> &mdash; Left foot and right foot (0-5 each)</li>
+    <li><strong>Shooting</strong> &mdash; Four corners of the goal (0-5 each)</li>
+    <li><strong>Sprint</strong> &mdash; Time in seconds (converted to a score automatically)</li>
+    <li><strong>Dribble</strong> &mdash; Time in seconds (converted to a score automatically)</li>
+    <li><strong>Kickups</strong> &mdash; Three attempts, best count is used (converted to a score automatically)</li>
+    <li><strong>Volley</strong> &mdash; Left foot and right foot (0-5 each)</li>
+</ol>
+
+<p><span class="step-number">6</span> The coach can either:</p>
+<ul>
+    <li><strong>Save as Draft</strong> &mdash; Come back and finish it later. No credit is used.</li>
+    <li><strong>Complete Exam</strong> &mdash; Finalise the exam. This uses <strong>1 credit</strong> and generates a certificate.</li>
+</ul>
+
+<div class="important"><strong>Important:</strong> Once an exam is completed, it cannot be changed. All scores must be correct before clicking "Complete".</div>
+
+<p><span class="step-number">7</span> After completing, the system automatically:</p>
+<ul>
+    <li>Calculates the total score (out of 80)</li>
+    <li>Assigns the achievement level (e.g. Gold, Silver)</li>
+    <li>Generates a certificate with a unique number (e.g. WFEB-1042)</li>
+    <li>Creates a downloadable PDF certificate</li>
+    <li>Sends the player an email with their results</li>
+    <li>Deducts 1 credit from the coach's balance</li>
+</ul>
+
+
+<!-- ========== 9. SCORING ========== -->
+<h2 id="scoring">9. How Scoring Works <span class="tag-implemented">Implemented</span></h2>
+
+<p>Each exam tests <strong>7 football skills</strong>. The maximum total score is <strong>80 points</strong>.</p>
+
+<table>
+    <tr>
+        <th>Category</th>
+        <th>What Is Measured</th>
+        <th>Max Points</th>
+    </tr>
+    <tr>
+        <td><strong>Short Passing</strong></td>
+        <td>Left foot (0-5) + Right foot (0-5)</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><strong>Long Passing</strong></td>
+        <td>Left foot (0-5) + Right foot (0-5)</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><strong>Shooting</strong></td>
+        <td>4 corners of goal (0-5 each)</td>
+        <td>20</td>
+    </tr>
+    <tr>
+        <td><strong>Sprint</strong></td>
+        <td>Time in seconds &rarr; converted to score</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><strong>Dribble</strong></td>
+        <td>Time in seconds &rarr; converted to score</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><strong>Kickups</strong></td>
+        <td>Best of 3 attempts &rarr; converted to score</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><strong>Volley</strong></td>
+        <td>Left foot (0-5) + Right foot (0-5)</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td colspan="2" style="text-align: right; font-weight: 700;">Maximum Total</td>
+        <td><strong>80</strong></td>
+    </tr>
+</table>
+
+<h3>Achievement Levels</h3>
+<p>Based on the total score, the player is awarded one of these levels:</p>
+
+<table>
+    <tr>
+        <th>Score</th>
+        <th>Achievement Level</th>
+        <th>Playing Level</th>
+    </tr>
+    <tr><td>80</td><td><strong>MASTERY</strong></td><td>World Class</td></tr>
+    <tr><td>70 &ndash; 79</td><td><strong>DIAMOND</strong></td><td>Professional</td></tr>
+    <tr><td>60 &ndash; 69</td><td><strong>GOLD</strong></td><td>Semi-Professional</td></tr>
+    <tr><td>50 &ndash; 59</td><td><strong>SILVER</strong></td><td>Advanced Amateur</td></tr>
+    <tr><td>40 &ndash; 49</td><td><strong>BRONZE</strong></td><td>Amateur</td></tr>
+    <tr><td>30 &ndash; 39</td><td><strong>MERIT+</strong></td><td>Intermediate</td></tr>
+    <tr><td>20 &ndash; 29</td><td><strong>MERIT</strong></td><td>Developing</td></tr>
+    <tr><td>15 &ndash; 19</td><td><strong>MERIT-</strong></td><td>Foundation Plus</td></tr>
+    <tr><td>10 &ndash; 14</td><td><strong>PASS+</strong></td><td>Foundation</td></tr>
+    <tr><td>5 &ndash; 9</td><td><strong>PASS</strong></td><td>Beginner</td></tr>
+    <tr><td>Below 5</td><td><strong>UNCLASSIFIED</strong></td><td>Unclassified</td></tr>
+</table>
+
+<h3>How Sprint &amp; Dribble Times Are Converted</h3>
+<p>The coach enters the time in seconds. The system automatically converts it to a score:</p>
+
+<table>
+    <tr>
+        <th>Sprint Time</th>
+        <th>Points</th>
+        <th>&nbsp;</th>
+        <th>Dribble Time</th>
+        <th>Points</th>
+    </tr>
+    <tr><td>Under 5.5s</td><td>10</td><td></td><td>Under 4.0s</td><td>10</td></tr>
+    <tr><td>5.5 - 6.0s</td><td>9</td><td></td><td>4.0 - 4.5s</td><td>9</td></tr>
+    <tr><td>6.0 - 6.5s</td><td>8</td><td></td><td>4.5 - 5.0s</td><td>8</td></tr>
+    <tr><td>6.5 - 7.0s</td><td>7</td><td></td><td>5.0 - 5.5s</td><td>7</td></tr>
+    <tr><td>7.0 - 7.5s</td><td>6</td><td></td><td>5.5 - 6.0s</td><td>6</td></tr>
+    <tr><td>7.5 - 8.0s</td><td>5</td><td></td><td>6.0 - 6.5s</td><td>5</td></tr>
+    <tr><td>8.0 - 8.5s</td><td>4</td><td></td><td>6.5 - 7.0s</td><td>4</td></tr>
+    <tr><td>8.5 - 9.0s</td><td>3</td><td></td><td>7.0 - 7.5s</td><td>3</td></tr>
+    <tr><td>9.0 - 9.5s</td><td>2</td><td></td><td>7.5 - 8.0s</td><td>2</td></tr>
+    <tr><td>9.5 - 10.0s</td><td>1</td><td></td><td>8.0 - 8.5s</td><td>1</td></tr>
+    <tr><td>Over 10.0s</td><td>0</td><td></td><td>Over 8.5s</td><td>0</td></tr>
+</table>
+
+<h3>How Kickups Are Scored</h3>
+<p>The player gets 3 attempts. The <strong>best attempt</strong> is used:</p>
+
+<table>
+    <tr><th>Best Count</th><th>Points</th></tr>
+    <tr><td>100 or more</td><td>10</td></tr>
+    <tr><td>90 - 99</td><td>9</td></tr>
+    <tr><td>75 - 89</td><td>8</td></tr>
+    <tr><td>60 - 74</td><td>7</td></tr>
+    <tr><td>45 - 59</td><td>6</td></tr>
+    <tr><td>30 - 44</td><td>5</td></tr>
+    <tr><td>15 - 29</td><td>4</td></tr>
+    <tr><td>10 - 14</td><td>3</td></tr>
+    <tr><td>5 - 9</td><td>2</td></tr>
+    <tr><td>3 - 4</td><td>1</td></tr>
+    <tr><td>Under 3</td><td>0</td></tr>
+</table>
+
+
+<!-- ========== 10. CERTIFICATES ========== -->
+<h2 id="certificates">10. Certificates &amp; Credits</h2>
+
+<h3>How Certificates Work <span class="tag-implemented">Implemented</span></h3>
+<ul>
+    <li>Every completed exam generates a unique certificate.</li>
+    <li>Certificates have a number like <strong>WFEB-1000</strong>, <strong>WFEB-1001</strong>, etc.</li>
+    <li>A PDF version is automatically created and can be downloaded by the coach or the player.</li>
+    <li>Anyone can verify a certificate at <a href="https://footballexams.com/verify-certificate/">https://footballexams.com/verify-certificate/</a>.</li>
+</ul>
+
+<h3>How Credits Work <span class="tag-not-implemented">Not Implemented</span></h3>
+<p>The credit purchase system will be implemented using a <strong>custom checkout</strong> powered by <strong>WooCommerce</strong> and <strong>Stripe</strong>. Coaches will purchase credits at a set price per credit. 1 credit = 1 certificate.</p>
+
+<h3>Revoking a Certificate <span class="tag-implemented">Implemented</span></h3>
+<p>If a certificate needs to be invalidated (e.g. fraud or a mistake):</p>
+<ol>
+    <li>Go to <strong>WFEB &rarr; Certificates</strong> in the admin panel</li>
+    <li>Find the certificate and click on it</li>
+    <li>Click <strong>"Revoke"</strong> and type in the reason</li>
+    <li>The certificate will now show as <strong>"Revoked"</strong> and will <strong>fail verification</strong> on the public page</li>
+</ol>
+
+
+<!-- ========== 11. BUYING CREDITS ========== -->
+<h2 id="buying-credits">11. How Coaches Buy Credits <span class="tag-not-implemented">Not Implemented</span></h2>
+
+<p>This feature will be implemented in a future update. The credit purchase system will use:</p>
+<ul>
+    <li><strong>Custom checkout page</strong> within the coach dashboard</li>
+    <li><strong>WooCommerce</strong> for order and product management</li>
+    <li><strong>Stripe</strong> for secure card payments</li>
+    <li>A set <strong>credit price</strong> (e.g. &pound;X per credit)</li>
+</ul>
+<p>Once live, coaches will be able to buy credits directly from their dashboard, and credits will be added to their account automatically after payment.</p>
+
+
+<!-- ========== 12. PLAYER DASHBOARD ========== -->
+<h2 id="player-dashboard">12. The Player Dashboard <span class="tag-implemented">Implemented</span></h2>
+
+<p>After a player logs in at <a href="https://footballexams.com/player-login/">https://footballexams.com/player-login/</a>, they arrive at their dashboard:</p>
+<div class="url-box"><a href="https://footballexams.com/player-dashboard/">https://footballexams.com/player-dashboard/</a></div>
+
+<p>The player dashboard is simpler than the coach's. It has a sidebar with these sections:</p>
+
+<div class="section-card">
+    <h4>Overview <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/player-dashboard/?section=overview">https://footballexams.com/player-dashboard/?section=overview</a></div>
+    <p>The home screen showing:</p>
+    <ul>
+        <li>A welcome message</li>
+        <li>How many certificates the player has</li>
+        <li>Best achievement level</li>
+        <li>Total exams taken</li>
+        <li>Average score</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>My Certificates <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/player-dashboard/?section=certificates">https://footballexams.com/player-dashboard/?section=certificates</a></div>
+    <p>A list of all certificates the player has earned. Each one shows:</p>
+    <ul>
+        <li>Certificate number (e.g. WFEB-1042)</li>
+        <li>Achievement level (Bronze, Gold, etc.)</li>
+        <li>Total score</li>
+        <li>Date issued</li>
+    </ul>
+    <p>Click on any certificate to see the full details and <strong>download the PDF</strong>.</p>
+</div>
+
+<div class="section-card">
+    <h4>Score History <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/player-dashboard/?section=scores">https://footballexams.com/player-dashboard/?section=scores</a></div>
+    <p>A record of every exam the player has taken. Click on any exam to see the full score breakdown across all 7 categories.</p>
+</div>
+
+<div class="section-card">
+    <h4>Profile <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/player-dashboard/?section=profile">https://footballexams.com/player-dashboard/?section=profile</a></div>
+    <p>The player can update their personal details:</p>
+    <ul>
+        <li>Full name, email, phone, address</li>
+        <li>Upload a profile picture</li>
+        <li>Date of birth is shown but cannot be changed (to protect certificate integrity)</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>Change Password <span class="tag-implemented">Implemented</span></h4>
+    <div class="url-box"><a href="https://footballexams.com/player-dashboard/?section=password">https://footballexams.com/player-dashboard/?section=password</a></div>
+    <p>The player can change their password here. They need to enter the current password first, then type the new password twice.</p>
+</div>
+
+
+<!-- ========== 13. VERIFY CERTIFICATE ========== -->
+<h2 id="verify-cert">13. How Anyone Can Verify a Certificate <span class="tag-implemented">Implemented</span></h2>
+
+<p>This is one of the most important features. Anyone (a football club, an employer, a parent) can check if a certificate is genuine.</p>
+
+<p><span class="step-number">1</span> Visit the verification page:</p>
+<div class="url-box"><a href="https://footballexams.com/verify-certificate/">https://footballexams.com/verify-certificate/</a></div>
+
+<p><span class="step-number">2</span> Enter three pieces of information:</p>
+<ul>
+    <li><strong>Player's Name</strong> (does not need to be exact &mdash; a partial match works)</li>
+    <li><strong>Certificate Number</strong> (e.g. WFEB-1042)</li>
+    <li><strong>Player's Date of Birth</strong></li>
+</ul>
+
+<p><span class="step-number">3</span> Click <strong>"Verify"</strong>.</p>
+
+<p><span class="step-number">4</span> If the certificate is real, the following details are shown:</p>
+<ul>
+    <li>Player's name</li>
+    <li>Total score</li>
+    <li>Achievement level</li>
+    <li>Exam date</li>
+    <li>Certificate number</li>
+    <li>Examiner's name</li>
+</ul>
+
+<p>If the certificate does not exist, or the details do not match, an error message is shown.</p>
+
+<div class="important"><strong>Note:</strong> If a certificate has been revoked by the admin, it will show as invalid on this page.</div>
+
+
+<!-- ========== 14. EMAILS ========== -->
+<h2 id="emails">14. Email Notifications <span class="tag-implemented">Implemented</span></h2>
+
+<p>The plugin sends automatic emails at key moments. No manual action is needed &mdash; they are sent automatically.</p>
+
+<table>
+    <tr>
+        <th>Email</th>
+        <th>Sent To</th>
+        <th>When It Is Sent</th>
+    </tr>
+    <tr>
+        <td><strong>Coach Approved</strong></td>
+        <td>Coach</td>
+        <td>When the admin approves their registration</td>
+    </tr>
+    <tr>
+        <td><strong>Coach Rejected</strong></td>
+        <td>Coach</td>
+        <td>When the admin rejects their registration (includes the reason)</td>
+    </tr>
+    <tr>
+        <td><strong>Player Welcome</strong></td>
+        <td>Player</td>
+        <td>When a coach adds them as a new player (includes login details)</td>
+    </tr>
+    <tr>
+        <td><strong>Exam Completed</strong></td>
+        <td>Coach</td>
+        <td>Confirmation when an exam is finalised</td>
+    </tr>
+    <tr>
+        <td><strong>Player Certificate</strong></td>
+        <td>Player</td>
+        <td>When their certificate is generated (includes score and level)</td>
+    </tr>
+    <tr>
+        <td><strong>Credit Purchase</strong></td>
+        <td>Coach</td>
+        <td>After credits are purchased (includes new balance)</td>
+    </tr>
+</table>
+
+<div class="tip"><strong>Tip:</strong> The "From" name and email address can be customised in <strong>WFEB &rarr; Settings &rarr; Email</strong> tab. By default, it uses the website name and admin email.</div>
+
+
+<!-- ========== 15. SETTINGS ========== -->
+<h2 id="settings">15. Plugin Settings <span class="tag-implemented">Implemented</span></h2>
+
+<p>The settings page can be found at:</p>
+<div class="url-box"><a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-settings">https://footballexams.com/wp-admin/admin.php?page=wfeb-settings</a></div>
+
+<p>The settings page has several tabs:</p>
+
+<div class="section-card">
+    <h4>General</h4>
+    <ul>
+        <li><strong>Certificate Prefix</strong> &mdash; The letters before the certificate number. Default is "WFEB" (so certificates are WFEB-1000, WFEB-1001, etc.). Can be changed to anything.</li>
+        <li><strong>Certificate Start Number</strong> &mdash; The first certificate number. Default is 1000.</li>
+        <li><strong>Coach Approval Mode</strong> &mdash; Choose between:
+            <ul>
+                <li><strong>Manual</strong> (recommended) &mdash; The admin must approve every coach</li>
+                <li><strong>Auto</strong> &mdash; Coaches are approved instantly when they register</li>
+            </ul>
+        </li>
+        <li><strong>Logo</strong> &mdash; Upload a logo, which appears on the login pages and dashboards</li>
+    </ul>
+</div>
+
+<div class="section-card not-impl-card">
+    <h4>WooCommerce <span class="tag-not-implemented">Not Implemented</span></h4>
+    <p>Will contain configuration for the credit purchase system (WooCommerce product, Stripe keys, credit price). Coming in a future update.</p>
+</div>
+
+<div class="section-card">
+    <h4>Email</h4>
+    <ul>
+        <li><strong>From Name</strong> &mdash; The name that appears in the "From" field of emails (e.g. "Football Exams")</li>
+        <li><strong>From Address</strong> &mdash; The email address that emails are sent from</li>
+    </ul>
+</div>
+
+<div class="section-card">
+    <h4>Certificate</h4>
+    <ul>
+        <li><strong>Certificate Background</strong> &mdash; Upload a background image for the PDF certificate</li>
+        <li><strong>Authoriser Name</strong> &mdash; The name printed at the bottom of certificates as the authorising signature (e.g. the organisation director's name)</li>
+    </ul>
+</div>
+
+
+<!-- ========== 16. FAQ ========== -->
+<h2 id="faq">16. Common Questions</h2>
+
+<div class="section-card">
+    <h4>A coach says they cannot log in. What should the admin do?</h4>
+    <p>Check two things:</p>
+    <ol>
+        <li>Go to <a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-coaches">WFEB &rarr; Coaches</a> and check if the coach's status is <strong>"Pending"</strong>. If so, they need to be approved first.</li>
+        <li>If the coach is already approved, suggest they reset their password at <a href="https://footballexams.com/forgot-password/">https://footballexams.com/forgot-password/</a>.</li>
+    </ol>
+</div>
+
+<div class="section-card">
+    <h4>A coach says they cannot complete an exam. Why?</h4>
+    <p>They likely have <strong>0 credits</strong>. Check their credit balance from <a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-coaches">WFEB &rarr; Coaches</a> by clicking on their name. They will need more credits to continue.</p>
+</div>
+
+<div class="section-card">
+    <h4>Can a player register on their own?</h4>
+    <p>No. Players must be added by their coach. The player receives a welcome email with login details automatically.</p>
+</div>
+
+<div class="section-card">
+    <h4>Can the admin give a coach free credits?</h4>
+    <p>Yes. Go to <a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-coaches">WFEB &rarr; Coaches</a>, click on the coach's name, and adjust their credit balance.</p>
+</div>
+
+<div class="section-card">
+    <h4>A certificate was issued by mistake. Can it be cancelled?</h4>
+    <p>Yes. Go to <a href="https://footballexams.com/wp-admin/admin.php?page=wfeb-certificates">WFEB &rarr; Certificates</a>, find the certificate, and click <strong>"Revoke"</strong>. A reason must be typed in. The certificate will no longer pass verification.</p>
+</div>
+
+<div class="section-card">
+    <h4>Can coaches see each other's players?</h4>
+    <p>No. Each coach can only see their own players. Only the admin can see all players and all coaches.</p>
+</div>
+
+<div class="section-card">
+    <h4>Is there a dark mode?</h4>
+    <p>Yes. Both the coach and player dashboards have a theme toggle (sun/moon icon in the top-right corner) to switch between light and dark mode. The default is light mode.</p>
+</div>
+
+<div class="section-card">
+    <h4>Something is broken or not working. Who should be contacted?</h4>
+    <p>Contact the developer (Devash) at <a href="https://devash.pro">devash.pro</a>.</p>
+</div>
+
+<hr>
+
+<p style="text-align: center; color: #6b7280; font-size: 0.85rem; margin-top: 40px;">
+    WFEB Plugin v2.2.0 &mdash; Built by <a href="https://devash.pro" style="color: #0056A7;">Devash</a><br>
+    This guide was prepared for footballexams.com
+</p>
+
+</div><!-- .container -->
+</body>
+</html>

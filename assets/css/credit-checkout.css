@@ -1,0 +1,625 @@
+/**
+ * WFEB Credit Checkout Page
+ * Aclas-style 2-column checkout layout with WFEB brand colours.
+ *
+ * @package WFEB
+ * @since   1.0.0
+ */
+
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+body.wfeb-credit-checkout-page *,
+body.wfeb-credit-checkout-page *::before,
+body.wfeb-credit-checkout-page *::after {
+	box-sizing: border-box;
+	margin: 0;
+	/* padding: 0; */
+}
+
+body.wfeb-credit-checkout-page {
+	font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: #111827;
+	background: #F0F2F5;
+	min-height: 100vh;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* ── Page Layout ───────────────────────────────────────────────────────── */
+.wfeb-cco-container {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 40px 20px;
+}
+
+.wfeb-cco-card {
+	width: 100%;
+	max-width: 900px;
+	background: #fff;
+	border-radius: 16px;
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+	overflow: hidden;
+}
+
+/* ── Two-Column Layout ─────────────────────────────────────────────────── */
+.wfeb-cco-columns {
+	display: grid;
+	grid-template-columns: 42% 58%;
+	min-height: 560px;
+}
+
+/* LEFT — Order Summary ────────────────────────────────────────────────── */
+.wfeb-cco-left {
+	background: #F7F8FA;
+	padding: 48px 32px 48px 40px;
+	border-right: 1px solid #E5E7EB;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.wfeb-cco-back-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+	color: #6B7280;
+	text-decoration: none;
+	transition: color 0.2s;
+}
+
+.wfeb-cco-back-link:hover {
+	color: #0056A7;
+}
+
+.wfeb-cco-summary-title {
+	font-size: 13px;
+	font-weight: 600;
+	color: #6B7280;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+/* Credit Item Row */
+.wfeb-cco-item {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	padding: 16px 0;
+	border-bottom: 1px solid #E5E7EB;
+}
+
+.wfeb-cco-item-icon {
+	width: 48px;
+	height: 48px;
+	border-radius: 10px;
+	background: rgba(0, 86, 167, 0.08);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	color: #0056A7;
+}
+
+.wfeb-cco-item-icon .dashicons {
+	font-size: 22px;
+	width: 22px;
+	height: 22px;
+	line-height: 1;
+}
+
+.wfeb-cco-item-details {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+}
+
+.wfeb-cco-item-name {
+	font-size: 14px;
+	font-weight: 600;
+	color: #111827;
+}
+
+.wfeb-cco-item-desc {
+	font-size: 12px;
+	color: #6B7280;
+	margin-top: 2px;
+}
+
+.wfeb-cco-item-price {
+	font-size: 15px;
+	font-weight: 700;
+	color: #111827;
+	white-space: nowrap;
+}
+
+/* Totals */
+.wfeb-cco-totals {
+	margin-top: auto;
+	padding-top: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.wfeb-cco-total-row {
+	display: flex;
+	justify-content: space-between;
+	font-size: 13px;
+	color: #6B7280;
+}
+
+.wfeb-cco-total-row.is-grand {
+	font-size: 16px;
+	font-weight: 700;
+	color: #111827;
+	padding-top: 12px;
+	border-top: 2px solid #E5E7EB;
+	margin-top: 4px;
+}
+
+.wfeb-cco-total-row.is-grand span:last-child {
+	color: #0056A7;
+}
+
+/* RIGHT — Billing + Payment ───────────────────────────────────────────── */
+.wfeb-cco-right {
+	padding: 48px 48px 48px 52px;
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+}
+
+.wfeb-cco-section-title {
+	font-size: 13px;
+	font-weight: 600;
+	color: #6B7280;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	margin-bottom: 14px !important;
+}
+
+/* ── Form Elements ─────────────────────────────────────────────────────── */
+.wfeb-cco-form-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+	margin-bottom: 12px;
+}
+
+.wfeb-cco-form-row.is-full {
+	grid-template-columns: 1fr;
+}
+
+.wfeb-cco-field {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.wfeb-cco-label {
+	font-size: 12px;
+	font-weight: 500;
+	color: #6B7280;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	margin: 7px 0 !important;
+}
+
+.wfeb-cco-input,
+.wfeb-cco-select {
+	height: 42px;
+	padding: 0 12px;
+	border: 1px solid #E5E7EB;
+	border-radius: 8px;
+	font-size: 14px;
+	font-family: inherit;
+	color: #111827;
+	background: #fff;
+	transition: border-color 0.2s;
+	outline: none;
+	width: 100%;
+}
+
+.wfeb-cco-input:focus,
+.wfeb-cco-select:focus {
+	border-color: #0056A7;
+}
+
+.wfeb-cco-input::placeholder {
+	color: #9CA3AF;
+}
+
+/* ── WooCommerce Payment Methods Override ──────────────────────────────── */
+/*
+ * Actual rendered structure from checkout/payment.php:
+ *   <div id="payment" class="woocommerce-checkout-payment">
+ *     <ul class="wc_payment_methods payment_methods methods">
+ *       <li class="wc_payment_method payment_method_bacs">
+ *         <input id="payment_method_bacs" type="radio" class="input-radio" ...>
+ *         <label for="payment_method_bacs">Name [optional <img>]</label>
+ *         <div class="payment_box payment_method_bacs">...</div>
+ *       </li>
+ *     </ul>
+ *     <div class="form-row place-order">nonces + WC button</div>
+ *   </div>
+ */
+
+body.wfeb-credit-checkout-page #payment {
+	background: transparent;
+	border: none;
+	padding: 0;
+}
+
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+/* Each li: flex row so radio + label sit side by side, payment_box wraps below */
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods li.wc_payment_method {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0 10px;
+	border-radius: 10px;
+	padding: 14px 16px;
+	background: #fff;
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods li.wc_payment_method:hover {
+	border-color: #0056A7;
+}
+
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods li.wc_payment_method:has(input:checked) {
+	border-color: #0056A7;
+	box-shadow: 0 0 0 1px #0056A7;
+}
+
+/* Radio button */
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods li.wc_payment_method input.input-radio {
+	flex-shrink: 0;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	accent-color: #0056A7;
+	cursor: pointer;
+}
+
+/* Label — takes remaining width on same row as radio */
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods li.wc_payment_method label {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #111827;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	line-height: 1.4;
+}
+
+/* Card logo images inside label (Stripe) */
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods li.wc_payment_method label img {
+	height: 22px;
+	width: auto;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+body.wfeb-credit-checkout-page #payment .wc-stripe-card-icons-container {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	flex-wrap: wrap;
+}
+
+/* Payment description box — full width, wraps below radio+label */
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods li.wc_payment_method .payment_box {
+	flex-basis: 100%;
+	margin: 10px 0 0 0;
+	padding: 12px 14px;
+	background: #F7F8FA;
+	border-radius: 8px;
+	font-size: 13px;
+	color: #6B7280;
+	line-height: 1.6;
+}
+
+body.wfeb-credit-checkout-page #payment ul.wc_payment_methods li.wc_payment_method .payment_box p {
+	margin: 0;
+}
+
+/* Stripe card element container */
+body.wfeb-credit-checkout-page .wc-stripe_cc-container {
+	width: 100%;
+}
+
+body.wfeb-credit-checkout-page #wc-stripe-card-element {
+	min-height: 44px;
+	border: 1px solid #E5E7EB;
+	border-radius: 8px;
+	padding: 10px 12px;
+	background: #fff;
+	margin-bottom: 10px;
+}
+
+/* Stripe save card row */
+body.wfeb-credit-checkout-page .wc-stripe-save-source {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 8px;
+	font-size: 13px;
+	color: #6B7280;
+}
+
+body.wfeb-credit-checkout-page .wc-stripe-save-source .save-source-label {
+	margin: 0;
+	font-weight: 400;
+	cursor: pointer;
+}
+
+/* Hide WC's native place-order section entirely — we use our own Pay button */
+body.wfeb-credit-checkout-page #payment .form-row.place-order {
+	display: none !important;
+}
+
+/* ── Pay Button ────────────────────────────────────────────────────────── */
+.wfeb-cco-pay-btn {
+	width: 100%;
+	height: 52px;
+	background: #0056A7;
+	color: #fff;
+	border: none;
+	border-radius: 10px;
+	font-family: inherit;
+	font-size: 16px;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	cursor: pointer;
+	transition: background 0.2s, transform 0.15s;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.wfeb-cco-pay-btn:hover {
+	background: #004485;
+	transform: translateY(-1px);
+}
+
+.wfeb-cco-pay-btn:active {
+	transform: translateY(0);
+}
+
+.wfeb-cco-pay-btn:disabled {
+	background: #D1D5DB;
+	cursor: not-allowed;
+	transform: none;
+}
+
+.wfeb-cco-pay-btn.is-loading {
+	color: transparent !important;
+	pointer-events: none;
+}
+
+/* ── 12-blade iOS-style spinner (white blades on solid button) ──────── */
+.wfeb-cco-spinner {
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 20px;
+	height: 20px;
+}
+
+.wfeb-cco-pay-btn.is-loading .wfeb-cco-spinner {
+	display: block;
+}
+
+.wfeb-cco-spinner .wfeb-blade {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 2px;
+	height: 6px;
+	margin-left: -1px;
+	border-radius: 1px;
+	background: #fff;
+	transform-origin: center 10px;
+	animation: wfebBladeFade 1s linear infinite;
+}
+
+.wfeb-cco-spinner .wfeb-blade:nth-child(1)  { transform: rotate(0deg);   animation-delay: 0s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(2)  { transform: rotate(30deg);  animation-delay: -0.917s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(3)  { transform: rotate(60deg);  animation-delay: -0.833s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(4)  { transform: rotate(90deg);  animation-delay: -0.75s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(5)  { transform: rotate(120deg); animation-delay: -0.667s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(6)  { transform: rotate(150deg); animation-delay: -0.583s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(7)  { transform: rotate(180deg); animation-delay: -0.5s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(8)  { transform: rotate(210deg); animation-delay: -0.417s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(9)  { transform: rotate(240deg); animation-delay: -0.333s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(10) { transform: rotate(270deg); animation-delay: -0.25s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(11) { transform: rotate(300deg); animation-delay: -0.167s; }
+.wfeb-cco-spinner .wfeb-blade:nth-child(12) { transform: rotate(330deg); animation-delay: -0.083s; }
+
+@keyframes wfebBladeFade {
+	0%   { opacity: 1; }
+	100% { opacity: 0.15; }
+}
+
+/* ── Toast Notifications ────────────────────────────────────────────── */
+#wfeb-cco-toast-wrap {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 999999;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	max-width: 380px;
+	pointer-events: none;
+}
+
+.wfeb-cco-toast {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
+	padding: 14px 16px;
+	font-size: 13px;
+	line-height: 1.45;
+	color: #1F2937;
+	pointer-events: auto;
+	opacity: 0;
+	transform: translateX(40px);
+	transition: opacity 0.25s ease, transform 0.25s ease;
+	border-left: 3px solid #DC2626;
+}
+
+.wfeb-cco-toast.is-visible {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.wfeb-cco-toast.is-leaving {
+	opacity: 0;
+	transform: translateX(40px);
+}
+
+.wfeb-cco-toast__icon {
+	color: #DC2626;
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 1;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+.wfeb-cco-toast__msg {
+	flex: 1;
+	min-width: 0;
+	word-break: break-word;
+}
+
+.wfeb-cco-toast__close {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	font-size: 18px;
+	line-height: 1;
+	color: #9CA3AF;
+	cursor: pointer;
+	flex-shrink: 0;
+	transition: color 0.15s;
+}
+
+.wfeb-cco-toast__close:hover {
+	color: #374151;
+}
+
+@media (max-width: 480px) {
+	#wfeb-cco-toast-wrap {
+		right: 12px;
+		left: 12px;
+		max-width: none;
+	}
+}
+
+.wfeb-cco-security-note {
+	text-align: center;
+	font-size: 12px;
+	color: #9CA3AF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────── */
+.wfeb-cco-footer {
+	padding: 16px 40px;
+	border-top: 1px solid #E5E7EB;
+	text-align: center;
+	font-size: 12px;
+	color: #9CA3AF;
+	background: #F7F8FA;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+}
+
+.wfeb-cco-footer-copy {
+	margin: 0;
+}
+
+.wfeb-cco-footer-links {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.wfeb-cco-footer-links a {
+	color: #9CA3AF;
+	text-decoration: none;
+	transition: color 0.15s;
+}
+
+.wfeb-cco-footer-links a:hover {
+	color: #0056A7;
+}
+
+.wfeb-cco-footer-sep {
+	color: #D1D5DB;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+	.wfeb-cco-columns {
+		grid-template-columns: 1fr;
+	}
+
+	.wfeb-cco-left {
+		border-right: none;
+		border-bottom: 1px solid #E5E7EB;
+		padding: 32px 24px;
+	}
+
+	.wfeb-cco-right {
+		padding: 32px 24px;
+	}
+}
+
+@media (max-width: 480px) {
+	.wfeb-cco-form-row {
+		grid-template-columns: 1fr;
+	}
+
+	.wfeb-cco-container {
+		padding: 0;
+	}
+
+	.wfeb-cco-card {
+		border-radius: 0;
+		min-height: 100vh;
+	}
+}

@@ -1,0 +1,1630 @@
+/**
+ * WFEB Plugin - Admin Styles
+ * Minimalist Google-card style admin UI for all WFEB wp-admin pages.
+ * Covers: Dashboard, Coaches, Players, Exams, Certificates, Analytics, Settings
+ */
+
+/* ==========================================================================
+   Section 1: CSS Custom Properties
+   ========================================================================== */
+
+:root {
+    --wfeb-bg:        #f1f5f9;
+    --wfeb-surface:   #ffffff;
+    --wfeb-border:    #e2e8f0;
+    --wfeb-primary:   #1e293b;
+    --wfeb-secondary: #64748b;
+    --wfeb-accent:    #10B981;
+    --wfeb-blue:      #3b82f6;
+    --wfeb-danger:    #ef4444;
+    --wfeb-warning:   #f59e0b;
+    --wfeb-success:   #22c55e;
+    --wfeb-radius:    16px;
+    --wfeb-shadow:    0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.04);
+
+    --wfeb-scrollbar-thumb: #c1c8d0;
+    --wfeb-scrollbar-thumb-hover: #a0aab4;
+    --wfeb-scrollbar-track: transparent;
+}
+
+/* ==========================================================================
+   Section 1b: Custom Scrollbars
+   ========================================================================== */
+
+/*
+ * This CSS only loads on WFEB admin pages (enqueue is gated),
+ * so targeting html/body is safe — no bleed to other WP pages.
+ */
+
+/* Standards-based (Firefox, modern Chrome/Edge) */
+html,
+body,
+.wfeb-wrap,
+.wfeb-wrap *,
+.wfeb-modal {
+    scrollbar-width: thin;
+    scrollbar-color: var(--wfeb-scrollbar-thumb) var(--wfeb-scrollbar-track);
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--wfeb-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--wfeb-scrollbar-thumb);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--wfeb-scrollbar-thumb-hover);
+}
+
+/* Scrollbar gutter — reserve space to prevent layout shift */
+html {
+    scrollbar-gutter: stable;
+}
+
+.wfeb-modal {
+    scrollbar-gutter: stable;
+}
+
+/* ==========================================================================
+   Section 2: Page Layout
+   ========================================================================== */
+
+.wfeb-wrap {
+    max-width: 1280px;
+    margin: 24px 20px 0 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.wfeb-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.wfeb-page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--wfeb-primary);
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.2;
+}
+
+.wfeb-page-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ==========================================================================
+   Section 3: Stat Cards
+   ========================================================================== */
+
+.wfeb-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.wfeb-stat-card {
+    background: var(--wfeb-surface);
+    border-radius: var(--wfeb-radius);
+    box-shadow: var(--wfeb-shadow);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: box-shadow .15s ease;
+}
+
+.wfeb-stat-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,.1);
+}
+
+.wfeb-stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--wfeb-secondary);
+}
+
+.wfeb-stat-number {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--wfeb-primary);
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.wfeb-stat-footer {
+    font-size: 12px;
+    color: var(--wfeb-secondary);
+    margin-top: 4px;
+}
+
+.wfeb-stat-footer a {
+    color: var(--wfeb-accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Section 4: Table Card
+   ========================================================================== */
+
+.wfeb-table-card {
+    background: var(--wfeb-surface);
+    border-radius: var(--wfeb-radius);
+    box-shadow: var(--wfeb-shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.wfeb-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--wfeb-border);
+    flex-wrap: wrap;
+    gap: 10px;
+    border-radius: var(--wfeb-radius) var(--wfeb-radius) 0 0;
+}
+
+.wfeb-table-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--wfeb-primary);
+    margin: 0;
+}
+
+.wfeb-search-box {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.wfeb-search-input {
+    border: 1px solid var(--wfeb-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    width: 260px;
+    outline: none;
+    color: var(--wfeb-primary);
+    background: #f8fafc;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.wfeb-search-btn {
+    align-self: stretch !important;
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+}
+
+.wfeb-search-input:focus {
+    border-color: var(--wfeb-accent);
+    box-shadow: 0 0 0 3px rgba(16,185,129,.12);
+    background: #fff;
+}
+
+.wfeb-table-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ==========================================================================
+   Section 5: Table
+   ========================================================================== */
+
+.wfeb-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.wfeb-table thead th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--wfeb-secondary);
+    background: #f8fafc;
+    border-bottom: 1px solid var(--wfeb-border);
+    white-space: nowrap;
+}
+
+/* Round corners when table-header is absent */
+.wfeb-table-card > .wfeb-table thead th:first-child {
+    border-top-left-radius: var(--wfeb-radius);
+}
+.wfeb-table-card > .wfeb-table thead th:last-child {
+    border-top-right-radius: var(--wfeb-radius);
+}
+
+/* Round bottom corners of last row */
+.wfeb-table-card > .wfeb-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: var(--wfeb-radius);
+}
+.wfeb-table-card > .wfeb-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: var(--wfeb-radius);
+}
+
+.wfeb-table tbody td {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--wfeb-primary);
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.wfeb-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.wfeb-table tbody tr:hover td {
+    background: #f8fafc;
+}
+
+.wfeb-table td a {
+    color: var(--wfeb-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.wfeb-table td a:hover {
+    text-decoration: underline;
+}
+
+.wfeb-table .col-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.wfeb-row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.wfeb-table-empty {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--wfeb-secondary);
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   Section 6: Status Badges
+   ========================================================================== */
+
+.wfeb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+}
+
+.wfeb-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Approved / Active / Completed */
+.wfeb-badge--approved,
+.wfeb-badge--active,
+.wfeb-badge--completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.wfeb-badge--approved::before,
+.wfeb-badge--active::before,
+.wfeb-badge--completed::before {
+    background: #22c55e;
+}
+
+/* Pending / Draft */
+.wfeb-badge--pending,
+.wfeb-badge--draft {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.wfeb-badge--pending::before,
+.wfeb-badge--draft::before {
+    background: #eab308;
+}
+
+/* Rejected / Revoked */
+.wfeb-badge--rejected,
+.wfeb-badge--revoked {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.wfeb-badge--rejected::before,
+.wfeb-badge--revoked::before {
+    background: #ef4444;
+}
+
+/* Suspended */
+.wfeb-badge--suspended {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.wfeb-badge--suspended::before {
+    background: #94a3b8;
+}
+
+/* ==========================================================================
+   Section 7: Buttons
+   ========================================================================== */
+
+.wfeb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1;
+    transition: all .15s ease;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.wfeb-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(16,185,129,.25);
+}
+
+.wfeb-btn--primary {
+    background: var(--wfeb-accent);
+    color: #fff;
+}
+
+.wfeb-btn--primary:hover {
+    background: #059669;
+    color: #fff;
+}
+
+.wfeb-btn--danger {
+    background: var(--wfeb-danger);
+    color: #fff;
+}
+
+.wfeb-btn--danger:hover {
+    background: #dc2626;
+    color: #fff;
+}
+
+.wfeb-btn--warning {
+    background: var(--wfeb-warning);
+    color: #fff;
+}
+
+.wfeb-btn--warning:hover {
+    background: #d97706;
+    color: #fff;
+}
+
+.wfeb-btn--ghost {
+    background: transparent;
+    color: var(--wfeb-secondary);
+    border: 1px solid var(--wfeb-border);
+}
+
+.wfeb-btn--ghost:hover {
+    background: #f8fafc;
+    color: var(--wfeb-primary);
+    border-color: #cbd5e1;
+}
+
+.wfeb-btn--sm {
+    padding: 5px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+.wfeb-btn:disabled,
+.wfeb-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Loading state — hides text, keeps width (no layout shift) */
+.wfeb-btn--loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+    cursor: not-allowed;
+    opacity: 1 !important; /* override .wfeb-btn:disabled { opacity: 0.5 } */
+    /* Blade colour consumed by the injected .wfeb-ios-spinner */
+    --wfeb-blade-color: #ffffff;
+}
+
+/* Ghost buttons get dark blades (visible on light backgrounds) */
+.wfeb-btn--ghost.wfeb-btn--loading {
+    --wfeb-blade-color: var(--wfeb-secondary);
+}
+
+/* ----------------------------------------------------------------
+   iOS 12-blade spinner
+   admin.js injects: <div class="wfeb-ios-spinner">
+                       <div class="wfeb-spinner-blade"></div> ×12
+                     </div>
+   ---------------------------------------------------------------- */
+
+.wfeb-ios-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 17px;
+    height: 17px;
+    pointer-events: none;
+}
+
+.wfeb-spinner-blade {
+    position: absolute;
+    width: 10%;
+    height: 22%;
+    background: var(--wfeb-blade-color, #ffffff);
+    border-radius: 1px;
+    top: 37%;
+    left: 44%;
+    will-change: opacity;
+    animation: wfebSpinnerBlade 1s linear infinite;
+}
+
+.wfeb-spinner-blade:nth-child(1)  { transform: rotate(0deg)   translateY(-130%); animation-delay: -1.667s; }
+.wfeb-spinner-blade:nth-child(2)  { transform: rotate(30deg)  translateY(-130%); animation-delay: -1.583s; }
+.wfeb-spinner-blade:nth-child(3)  { transform: rotate(60deg)  translateY(-130%); animation-delay: -1.5s;   }
+.wfeb-spinner-blade:nth-child(4)  { transform: rotate(90deg)  translateY(-130%); animation-delay: -1.417s; }
+.wfeb-spinner-blade:nth-child(5)  { transform: rotate(120deg) translateY(-130%); animation-delay: -1.333s; }
+.wfeb-spinner-blade:nth-child(6)  { transform: rotate(150deg) translateY(-130%); animation-delay: -1.25s;  }
+.wfeb-spinner-blade:nth-child(7)  { transform: rotate(180deg) translateY(-130%); animation-delay: -1.167s; }
+.wfeb-spinner-blade:nth-child(8)  { transform: rotate(210deg) translateY(-130%); animation-delay: -1.083s; }
+.wfeb-spinner-blade:nth-child(9)  { transform: rotate(240deg) translateY(-130%); animation-delay: -1s;     }
+.wfeb-spinner-blade:nth-child(10) { transform: rotate(270deg) translateY(-130%); animation-delay: -0.917s; }
+.wfeb-spinner-blade:nth-child(11) { transform: rotate(300deg) translateY(-130%); animation-delay: -0.833s; }
+.wfeb-spinner-blade:nth-child(12) { transform: rotate(330deg) translateY(-130%); animation-delay: -0.75s;  }
+
+@keyframes wfebSpinnerBlade {
+    0%   { opacity: 1;    }
+    50%  { opacity: 0.35; }
+    100% { opacity: 0.35; }
+}
+
+/* Back link style */
+.wfeb-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--wfeb-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.wfeb-back-link:hover {
+    color: var(--wfeb-primary);
+}
+
+/* ==========================================================================
+   Section 8: Pagination
+   ========================================================================== */
+
+.wfeb-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 20px;
+    border-top: 1px solid var(--wfeb-border);
+}
+
+.wfeb-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid var(--wfeb-border);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--wfeb-secondary);
+    cursor: pointer;
+    text-decoration: none;
+    background: var(--wfeb-surface);
+    transition: all .15s;
+}
+
+.wfeb-page-btn:hover:not(.active):not(.disabled) {
+    background: #f8fafc;
+    color: var(--wfeb-primary);
+    border-color: #cbd5e1;
+}
+
+.wfeb-page-btn.active {
+    background: var(--wfeb-accent);
+    color: #fff;
+    border-color: var(--wfeb-accent);
+    font-weight: 700;
+}
+
+.wfeb-page-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.wfeb-pagination-info {
+    font-size: 12px;
+    color: var(--wfeb-secondary);
+    margin-right: 12px;
+}
+
+/* ==========================================================================
+   Section 9: Filter Bar
+   ========================================================================== */
+
+.wfeb-filter-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid var(--wfeb-border);
+    flex-wrap: wrap;
+    background: #fafbfc;
+}
+
+.wfeb-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.wfeb-filter-group label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--wfeb-secondary);
+}
+
+.wfeb-filter-group input[type="search"],
+.wfeb-filter-group input[type="date"],
+.wfeb-filter-group select {
+    padding: 7px 10px;
+    border: 1px solid var(--wfeb-border);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--wfeb-primary);
+    outline: none;
+    min-width: 130px;
+    background: #fff;
+    font-family: inherit;
+}
+
+.wfeb-filter-group input:focus,
+.wfeb-filter-group select:focus {
+    border-color: var(--wfeb-accent);
+    box-shadow: 0 0 0 3px rgba(16,185,129,.1);
+}
+
+.wfeb-filter-actions {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+/* ==========================================================================
+   Section 10: Status Tabs
+   ========================================================================== */
+
+.wfeb-status-tabs {
+    list-style: none;
+    display: flex;
+    gap: 0;
+    padding: 0 16px;
+    margin: 0;
+    border-bottom: 1px solid var(--wfeb-border);
+    background: var(--wfeb-surface);
+    border-radius: var(--wfeb-radius) var(--wfeb-radius) 0 0;
+}
+
+.wfeb-status-tabs li {
+    margin: 0;
+    padding: 0;
+}
+
+.wfeb-status-tabs li a {
+    display: block;
+    padding: 13px 14px;
+    outline: none !important;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--wfeb-secondary);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+}
+
+.wfeb-status-tabs li a:hover {
+    color: var(--wfeb-primary);
+}
+
+.wfeb-status-tabs li a:focus,
+.wfeb-status-tabs li a:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.wfeb-status-tabs li a.current {
+    color: var(--wfeb-accent);
+    border-bottom-color: var(--wfeb-accent);
+    font-weight: 600;
+}
+
+.wfeb-tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+.wfeb-status-tabs li a.current .wfeb-tab-count {
+    background: rgba(16,185,129,.15);
+    color: var(--wfeb-accent);
+}
+
+/* ==========================================================================
+   Section 11: Content Cards
+   ========================================================================== */
+
+.wfeb-card {
+    background: var(--wfeb-surface);
+    border-radius: var(--wfeb-radius);
+    box-shadow: var(--wfeb-shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.wfeb-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--wfeb-primary);
+    margin: 0;
+}
+
+.wfeb-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: none;
+    box-shadow: 0 1px 0 var(--wfeb-border);
+}
+
+/* ==========================================================================
+   Section 12: Detail View
+   ========================================================================== */
+
+.wfeb-detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.wfeb-detail-grid > * {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Last card in each column fills remaining height */
+.wfeb-detail-grid > * > .wfeb-card:last-child {
+    flex: 1;
+}
+
+.wfeb-detail-row {
+    display: flex;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 13px;
+    align-items: flex-start;
+}
+
+.wfeb-detail-row:last-child {
+    border-bottom: none;
+}
+
+.wfeb-detail-label {
+    min-width: 160px;
+    font-weight: 600;
+    color: var(--wfeb-secondary);
+    flex-shrink: 0;
+}
+
+.wfeb-detail-value {
+    color: var(--wfeb-primary);
+    flex: 1;
+    word-break: break-word;
+}
+
+/* ==========================================================================
+   Section 13: Settings
+   ========================================================================== */
+
+/* Override WP nav-tabs for settings */
+.wfeb-wrap .nav-tab-wrapper {
+    background: var(--wfeb-surface);
+    border-radius: var(--wfeb-radius) var(--wfeb-radius) 0 0;
+    padding: 0 8px;
+    border-bottom: 1px solid var(--wfeb-border);
+    overflow: hidden;
+    margin-bottom: 0;
+    box-shadow: var(--wfeb-shadow);
+}
+
+.wfeb-wrap .nav-tab {
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    color: var(--wfeb-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 18px;
+    margin: 0 0 -1px;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.wfeb-wrap .nav-tab:hover {
+    color: var(--wfeb-primary);
+    background: transparent;
+}
+
+.wfeb-wrap .nav-tab-active {
+    color: var(--wfeb-accent);
+    border-bottom-color: var(--wfeb-accent);
+    font-weight: 600;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Settings page layout */
+.wfeb-settings-wrap {
+    margin-top: 16px;
+}
+
+.wfeb-settings-nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 1px solid var(--wfeb-border, #e2e8f0);
+    margin-bottom: 0;
+}
+
+.wfeb-settings-nav-item {
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--wfeb-secondary, #64748b);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 18px;
+    margin: 0 0 -1px;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.wfeb-settings-nav-item:hover {
+    color: var(--wfeb-primary, #0f172a);
+    background: transparent;
+}
+
+.wfeb-settings-nav-item.active {
+    color: var(--wfeb-accent, #10b981);
+    border-bottom-color: var(--wfeb-accent, #10b981);
+    font-weight: 600;
+    background: transparent;
+    box-shadow: none;
+}
+
+.wfeb-settings-content {
+    background: var(--wfeb-surface);
+    border-radius: 0 0 var(--wfeb-radius) var(--wfeb-radius);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+}
+
+/* Remove card shadow/bg when nested inside settings content — prevent double box */
+.wfeb-settings-content .wfeb-card {
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    margin-bottom: 24px;
+}
+
+.wfeb-settings-content .wfeb-card-header {
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--wfeb-border, #e2e8f0);
+}
+
+.wfeb-settings-content .wfeb-card-body {
+    padding: 0;
+}
+
+/* Settings form rows */
+.wfeb-settings-form .wfeb-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.wfeb-settings-form .wfeb-form-row:last-child {
+    border-bottom: none;
+}
+
+.wfeb-settings-form .wfeb-form-label {
+    width: 200px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wfeb-primary, #0f172a);
+    padding-top: 7px;
+    line-height: 1.4;
+}
+
+.wfeb-settings-form .wfeb-form-input,
+.wfeb-settings-form .wfeb-form-select {
+    max-width: 320px;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 13px;
+    border: 1px solid var(--wfeb-border, #e2e8f0);
+    border-radius: 6px;
+    background: var(--wfeb-surface, #fff);
+    color: var(--wfeb-primary, #0f172a);
+    transition: border-color .15s, box-shadow .15s;
+    box-sizing: border-box;
+}
+
+.wfeb-settings-form .wfeb-form-input:focus,
+.wfeb-settings-form .wfeb-form-select:focus {
+    border-color: var(--wfeb-accent, #10b981);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, .1);
+    outline: none;
+}
+
+.wfeb-settings-form .wfeb-form-description {
+    width: 100%;
+    font-size: 12px;
+    color: var(--wfeb-secondary, #64748b);
+    margin: 2px 0 0;
+    line-height: 1.5;
+}
+
+/* Upload button — match input height */
+.wfeb-settings-form .wfeb-admin-upload-btn {
+    height: 36px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 34px;
+    border: 1px solid var(--wfeb-border, #e2e8f0);
+    border-radius: 6px;
+    background: var(--wfeb-surface, #fff);
+    color: var(--wfeb-primary, #0f172a);
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+.wfeb-settings-form .wfeb-admin-upload-btn:hover {
+    background: #f8fafc;
+    border-color: var(--wfeb-accent, #10b981);
+    color: var(--wfeb-accent, #10b981);
+}
+
+.wfeb-settings-save {
+    padding-top: 16px;
+    margin-top: 4px;
+    border-top: 1px solid var(--wfeb-border, #e2e8f0);
+}
+
+/* Logo preview */
+.wfeb-logo-preview {
+    margin-top: 10px;
+}
+
+.wfeb-logo-preview img {
+    max-height: 60px;
+    width: auto;
+    border-radius: 4px;
+    border: 1px solid var(--wfeb-border, #e2e8f0);
+    padding: 4px;
+    background: #fff;
+}
+
+/* Certificate background preview */
+.wfeb-cert-bg-preview {
+    margin-top: 10px;
+}
+
+.wfeb-cert-bg-preview img {
+    max-width: 320px;
+    height: auto;
+    border-radius: 6px;
+    border: 1px solid var(--wfeb-border, #e2e8f0);
+}
+
+/* Override WP form-table inside settings */
+.wfeb-settings-form .form-table {
+    margin: 0;
+    border-collapse: collapse;
+}
+
+.wfeb-settings-form .form-table th {
+    padding: 16px 24px 16px 0;
+    width: 220px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--wfeb-primary);
+    vertical-align: top;
+}
+
+.wfeb-settings-form .form-table td {
+    padding: 12px 0;
+}
+
+.wfeb-settings-form .form-table tr {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.wfeb-settings-form .form-table tr:last-child {
+    border-bottom: none;
+}
+
+.wfeb-settings-form input[type="text"],
+.wfeb-settings-form input[type="number"],
+.wfeb-settings-form input[type="email"],
+.wfeb-settings-form input[type="url"],
+.wfeb-settings-form select {
+    border: 1px solid var(--wfeb-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--wfeb-primary);
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.wfeb-settings-form input:focus,
+.wfeb-settings-form select:focus {
+    border-color: var(--wfeb-accent);
+    box-shadow: 0 0 0 3px rgba(16,185,129,.1);
+}
+
+.wfeb-settings-form .description {
+    color: var(--wfeb-secondary);
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.wfeb-settings-form p.submit {
+    padding: 20px 0 0;
+    margin: 0;
+    border-top: 1px solid var(--wfeb-border);
+    margin-top: 8px;
+}
+
+/* Pages reference table */
+.wfeb-pages-table {
+    width: 100%;
+    font-size: 13px;
+    border-collapse: collapse;
+}
+
+.wfeb-pages-table td {
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--wfeb-primary);
+}
+
+.wfeb-pages-table td:first-child {
+    font-weight: 600;
+    color: var(--wfeb-secondary);
+    width: 200px;
+}
+
+.wfeb-pages-table td a {
+    color: var(--wfeb-blue);
+    text-decoration: none;
+    margin-right: 10px;
+    font-size: 12px;
+}
+
+.wfeb-pages-table td a:hover {
+    text-decoration: underline;
+}
+
+/* Threshold table in exam settings */
+.wfeb-threshold-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.wfeb-threshold-table th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--wfeb-secondary);
+    background: #f8fafc;
+    border-bottom: 1px solid var(--wfeb-border);
+}
+
+.wfeb-threshold-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+}
+
+.wfeb-threshold-table input[type="number"] {
+    width: 80px;
+    padding: 5px 8px;
+    border: 1px solid var(--wfeb-border);
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* Scoring reference grid */
+.wfeb-scoring-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+}
+
+/* ==========================================================================
+   Section 14: Charts
+   ========================================================================== */
+
+.wfeb-charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.wfeb-chart-card {
+    background: var(--wfeb-surface);
+    border-radius: var(--wfeb-radius);
+    box-shadow: var(--wfeb-shadow);
+    padding: 24px;
+}
+
+.wfeb-chart-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--wfeb-primary);
+    margin: 0 0 16px;
+}
+
+.wfeb-chart-card canvas {
+    width: 100% !important;
+    max-height: 260px;
+}
+
+/* ==========================================================================
+   Section 15: Modals
+   ========================================================================== */
+
+.wfeb-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 100050;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.wfeb-modal-overlay.active {
+    display: flex;
+}
+
+@keyframes wfebModalIn {
+    from { opacity: 0; transform: scale(.96) translateY(-8px); }
+    to   { opacity: 1; transform: scale(1)  translateY(0);    }
+}
+
+.wfeb-modal {
+    background: #fff;
+    border-radius: var(--wfeb-radius);
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    max-width: 480px;
+    width: 92%;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: wfebModalIn .18s ease;
+}
+
+.wfeb-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--wfeb-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wfeb-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--wfeb-primary);
+    margin: 0;
+}
+
+.wfeb-modal-close {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #f1f5f9;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--wfeb-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s;
+    line-height: 1;
+}
+
+.wfeb-modal-close:hover {
+    background: #e2e8f0;
+    color: var(--wfeb-primary);
+}
+
+.wfeb-modal-body {
+    padding: 24px;
+}
+
+.wfeb-modal-body p {
+    font-size: 13px;
+    color: var(--wfeb-secondary);
+    line-height: 1.6;
+    margin: 0 0 12px;
+}
+
+.wfeb-modal-body textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--wfeb-border);
+    border-radius: 8px;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 90px;
+    outline: none;
+    font-family: inherit;
+    margin-top: 6px;
+}
+
+.wfeb-modal-body textarea:focus {
+    border-color: var(--wfeb-accent);
+    box-shadow: 0 0 0 3px rgba(16,185,129,.1);
+}
+
+.wfeb-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--wfeb-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    background: #f8fafc;
+    border-radius: 0 0 var(--wfeb-radius) var(--wfeb-radius);
+}
+
+/* Coach detail action panel */
+.wfeb-action-panel {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid var(--wfeb-border);
+}
+
+.wfeb-action-panel-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--wfeb-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.wfeb-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wfeb-action-buttons .wfeb-btn {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Credit adjust card */
+.wfeb-credits-bar {
+    text-align: center;
+    padding: 16px 20px 20px;
+}
+
+.wfeb-credits-bar .wfeb-detail-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--wfeb-secondary);
+}
+
+.wfeb-credits-bar .wfeb-stat-number {
+    display: block;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--wfeb-primary);
+    line-height: 1.2;
+    margin-top: 2px;
+}
+
+.wfeb-admin-credit-form {
+    padding: 0 20px 20px;
+}
+
+.wfeb-credit-adjust-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.wfeb-credit-adjust-row input[type="number"] {
+    width: 80px;
+    padding: 9px 10px;
+    border: 1px solid var(--wfeb-border);
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.wfeb-credit-adjust-row input[type="text"] {
+    flex: 1;
+    min-width: 100px;
+    padding: 9px 10px;
+    border: 1px solid var(--wfeb-border);
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.wfeb-credit-adjust-row .wfeb-btn {
+    padding: 9px 16px;
+    white-space: nowrap;
+    align-self: stretch;
+}
+
+.wfeb-text-hint {
+    font-size: 12px;
+    color: var(--wfeb-secondary);
+    margin: 10px 0 0;
+}
+
+/* ==========================================================================
+   Section 16: Utilities
+   ========================================================================== */
+
+.wfeb-empty-state {
+    text-align: center;
+    padding: 56px 20px;
+    color: var(--wfeb-secondary);
+}
+
+.wfeb-empty-state p {
+    font-size: 14px;
+    margin: 8px 0 0;
+    color: var(--wfeb-secondary);
+}
+
+/* Standalone spinner wrapper — add 12 .wfeb-spinner-blade children via JS */
+.wfeb-spinner {
+    display: inline-block;
+    position: relative;
+    width: 18px;
+    height: 18px;
+    --wfeb-blade-color: var(--wfeb-secondary);
+}
+
+/* ==========================================================================
+   Toast Notifications
+   ========================================================================== */
+
+.wfeb-toast-container {
+    position: fixed;
+    top: 52px; /* below WP admin bar */
+    right: 24px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 400px;
+    pointer-events: none;
+}
+
+@keyframes wfebToastIn {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: translateX(0);    }
+}
+
+@keyframes wfebToastOut {
+    from { opacity: 1; transform: translateX(0);    }
+    to   { opacity: 0; transform: translateX(16px); }
+}
+
+.wfeb-toast {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.13);
+    padding: 16px 16px 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-left: 4px solid var(--wfeb-success);
+    animation: wfebToastIn .22s ease;
+    min-width: 280px;
+    pointer-events: all;
+}
+
+.wfeb-toast--error   { border-left-color: var(--wfeb-danger); }
+.wfeb-toast--warning { border-left-color: var(--wfeb-warning); }
+.wfeb-toast--info    { border-left-color: var(--wfeb-blue); }
+
+.wfeb-toast-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--wfeb-success);
+}
+
+.wfeb-toast--error   .wfeb-toast-icon { background: var(--wfeb-danger); }
+.wfeb-toast--warning .wfeb-toast-icon { background: var(--wfeb-warning); }
+.wfeb-toast--info    .wfeb-toast-icon { background: var(--wfeb-blue); }
+
+.wfeb-toast-message {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--wfeb-primary);
+    line-height: 1.45;
+}
+
+.wfeb-toast-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--wfeb-secondary);
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 2px;
+    flex-shrink: 0;
+    opacity: .6;
+    transition: opacity .15s;
+}
+
+.wfeb-toast-close:hover { opacity: 1; }
+
+/* ==========================================================================
+   Tooltips  —  data-tooltip="..." on any element
+   Google-style: white card, subtle shadow, appears above on hover.
+   ========================================================================== */
+
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    color: var(--wfeb-primary);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    white-space: normal;
+    width: max-content;
+    max-width: 260px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.04);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s ease, transform .15s ease;
+    transform: translateX(-50%) translateY(4px);
+    z-index: 100000;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* When tooltip would overflow left edge, anchor to left */
+[data-tooltip-pos="left"]::after {
+    left: 0;
+    transform: translateX(0) translateY(4px);
+}
+[data-tooltip-pos="left"]:hover::after {
+    transform: translateX(0) translateY(0);
+}
+
+/* When tooltip would overflow right edge, anchor to right */
+[data-tooltip-pos="right"]::after {
+    left: auto;
+    right: 0;
+    transform: translateX(0) translateY(4px);
+}
+[data-tooltip-pos="right"]:hover::after {
+    transform: translateX(0) translateY(0);
+}
+
+/* Tooltip below the element (for top-of-page items) */
+[data-tooltip-pos="bottom"]::after {
+    bottom: auto;
+    top: calc(100% + 8px);
+}
+
+/* Inline elements like <th> need inline-block for positioning */
+th[data-tooltip],
+span[data-tooltip] {
+    cursor: help;
+}
+
+/* Text utilities */
+.wfeb-text-muted   { color: var(--wfeb-secondary); }
+.wfeb-text-success { color: var(--wfeb-success); }
+.wfeb-text-danger  { color: var(--wfeb-danger); }
+.wfeb-font-bold    { font-weight: 700; }
+.wfeb-mt-0         { margin-top: 0 !important; }
+.wfeb-mb-0         { margin-bottom: 0 !important; }
+
+/* ==========================================================================
+   Section 17: Responsive
+   ========================================================================== */
+
+@media screen and (max-width: 1024px) {
+    .wfeb-charts-grid { grid-template-columns: 1fr; }
+    .wfeb-stats-grid  { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media screen and (max-width: 782px) {
+    .wfeb-wrap { margin-right: 10px; }
+
+    .wfeb-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .wfeb-stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .wfeb-detail-grid { grid-template-columns: 1fr; }
+
+    .wfeb-filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .wfeb-filter-group input,
+    .wfeb-filter-group select {
+        min-width: unset;
+        width: 100%;
+    }
+
+    .wfeb-search-input { width: 100%; }
+
+    .wfeb-table-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .wfeb-settings-form .form-table th {
+        display: block;
+        width: 100%;
+        padding-bottom: 4px;
+    }
+
+    .wfeb-settings-form .form-table td {
+        display: block;
+    }
+
+    .wfeb-action-buttons .wfeb-btn { width: 100%; }
+}
+
+@media screen and (max-width: 480px) {
+    .wfeb-stats-grid  { grid-template-columns: 1fr 1fr; }
+    .wfeb-stat-number { font-size: 30px; }
+}

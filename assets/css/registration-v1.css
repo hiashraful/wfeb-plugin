@@ -1,0 +1,570 @@
+/**
+ * WFEB Registration V1 - A/B Test Variant
+ *
+ * Split-screen layout with branded left panel.
+ * FEB brand: navy #0b1f3a, red #e32b34, Sora font.
+ *
+ * @since 2.2.3
+ */
+
+/* ==========================================================================
+   Override body layout for V1
+   ========================================================================== */
+
+body.wfeb-reg-v1-body {
+    padding: 0 !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    background: #FFFFFF !important;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   Split Layout Container
+   ========================================================================== */
+
+.wfeb-reg-v1 {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+
+/* ==========================================================================
+   Left Panel - Branded
+   ========================================================================== */
+
+.wfeb-reg-v1__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 720px;
+    min-width: 720px;
+    height: 100vh;
+    background: #0b1f3a;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Subtle texture overlay */
+    background-image:
+        radial-gradient(ellipse at 20% 80%, rgba(227, 43, 52, .12) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(24, 99, 220, .1) 0%, transparent 50%),
+        linear-gradient(180deg, #0b1f3a 0%, #0d2444 100%);
+}
+
+.wfeb-reg-v1__panel-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 48px;
+    gap: 0;
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Logo */
+.wfeb-reg-v1__logo {
+    display: block;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
+
+.wfeb-reg-v1__logo img {
+    height: 120px;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+}
+
+/* Headline */
+.wfeb-reg-v1__headline {
+    font-family: 'Sora', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.85rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+    margin-bottom: 14px;
+}
+
+.wfeb-reg-v1__tagline {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, .65);
+    margin-bottom: 36px;
+}
+
+/* Benefits List */
+.wfeb-reg-v1__benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.wfeb-reg-v1__benefits li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .85);
+}
+
+.wfeb-reg-v1__benefit-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e32b34;
+    margin-top: 1px;
+}
+
+.wfeb-reg-v1__benefit-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Testimonial */
+.wfeb-reg-v1__quote {
+    position: relative;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin: 0 0 36px;
+}
+
+.wfeb-reg-v1__quote::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 24px;
+    width: 40px;
+    height: 3px;
+    background: #e32b34;
+    border-radius: 0 0 3px 3px;
+}
+
+.wfeb-reg-v1__quote p {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, .85);
+    font-style: italic;
+    margin: 0 0 14px;
+}
+
+.wfeb-reg-v1__quote footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.wfeb-reg-v1__quote footer strong {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.wfeb-reg-v1__quote footer span {
+    color: rgba(255, 255, 255, .45);
+}
+
+/* Trust Stats */
+.wfeb-reg-v1__trust {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 12px;
+    padding: 16px 0;
+}
+
+.wfeb-reg-v1__trust-item {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.wfeb-reg-v1__trust-number {
+    font-family: 'Sora', system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #FFFFFF;
+    letter-spacing: -0.02em;
+}
+
+.wfeb-reg-v1__trust-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, .45);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.wfeb-reg-v1__trust-divider {
+    width: 1px;
+    height: 32px;
+    background: rgba(255, 255, 255, .12);
+    flex-shrink: 0;
+}
+
+/* Panel Footer */
+.wfeb-reg-v1__panel-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 20px 48px;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.wfeb-reg-v1__panel-footer a {
+    color: rgba(255, 255, 255, .4);
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.wfeb-reg-v1__panel-footer a:hover {
+    color: rgba(255, 255, 255, .75);
+}
+
+.wfeb-reg-v1__panel-footer-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .2);
+    margin: 0 10px;
+    flex-shrink: 0;
+}
+
+
+/* ==========================================================================
+   Right Side - Form
+   ========================================================================== */
+
+.wfeb-reg-v1__main {
+    flex: 1;
+    min-width: 0;
+    margin-left: 720px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: #FAF8F5;
+    overflow-y: auto;
+}
+
+.wfeb-reg-v1__form-wrap {
+    width: 100%;
+    max-width: 800px;
+    padding: 48px 48px 56px;
+    animation: wfeb-fade-in 0.45s ease-out;
+    margin-left: 5%;
+}
+
+/* Mobile logo - hidden on desktop */
+.wfeb-reg-v1__mobile-logo {
+    display: none;
+    margin-bottom: 28px;
+}
+
+.wfeb-reg-v1__mobile-logo img {
+    height: 48px;
+    width: auto;
+}
+
+/* Form card container */
+.wfeb-reg-v1__form-card {
+    padding: 36px 32px 40px;
+}
+
+/* Form header */
+.wfeb-reg-v1__form-header {
+    margin-bottom: 32px;
+}
+
+.wfeb-reg-v1__form-title {
+    font-family: 'Sora', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: #0b1f3a;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 8px;
+}
+
+.wfeb-reg-v1__form-subtitle {
+    font-size: 0.9rem;
+    color: #6B6560;
+    line-height: 1.55;
+}
+
+
+/* ==========================================================================
+   Fieldset Sections
+   ========================================================================== */
+
+.wfeb-reg-v1__fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 8px;
+}
+
+.wfeb-reg-v1__legend {
+    display: block;
+    width: 100%;
+    font-family: 'Sora', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0b1f3a;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1.5px solid #E8E3DD;
+}
+
+
+/* ==========================================================================
+   Agreements
+   ========================================================================== */
+
+.wfeb-reg-v1__agreements {
+    background: #F5F2ED;
+    border: 1px solid #E8E3DD;
+    border-radius: 12px;
+    padding: 20px 22px 4px;
+    margin-bottom: 24px;
+}
+
+
+/* ==========================================================================
+   Submit button override - FEB navy + pill shape
+   ========================================================================== */
+
+.wfeb-reg-v1__submit-group {
+    margin-bottom: 0 !important;
+}
+
+body.wfeb-reg-v1-body .wfeb-reg-v1__submit {
+    background: #0b1f3a !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    padding: 16px 32px !important;
+    letter-spacing: 0.01em !important;
+    transition: all 0.25s cubic-bezier(.4, 0, .2, 1);
+}
+
+body.wfeb-reg-v1-body .wfeb-reg-v1__submit:hover {
+    background: #142d52 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(11, 31, 58, .2) !important;
+}
+
+body.wfeb-reg-v1-body .wfeb-reg-v1__submit:active {
+    transform: translateY(0);
+    box-shadow: none !important;
+}
+
+
+/* ==========================================================================
+   Auth links override
+   ========================================================================== */
+
+.wfeb-reg-v1__form-wrap .wfeb-auth-links {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #E8E3DD;
+}
+
+.wfeb-reg-v1__form-wrap .wfeb-auth-links a {
+    color: #0b1f3a;
+    font-weight: 600;
+}
+
+.wfeb-reg-v1__form-wrap .wfeb-auth-links a:hover {
+    color: #e32b34;
+}
+
+
+/* ==========================================================================
+   Form Input Overrides for V1
+   ========================================================================== */
+
+.wfeb-reg-v1__main .wfeb-form-input:focus {
+    border-color: #0b1f3a;
+    box-shadow: 0 0 0 3px rgba(11, 31, 58, .08);
+}
+
+.wfeb-reg-v1__main .wfeb-form-label .required {
+    color: #e32b34;
+}
+
+
+/* ==========================================================================
+   Custom scrollbar for left panel
+   ========================================================================== */
+
+.wfeb-reg-v1__panel {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.15) transparent;
+}
+
+.wfeb-reg-v1__panel::-webkit-scrollbar {
+    width: 4px;
+}
+
+.wfeb-reg-v1__panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.wfeb-reg-v1__panel::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.15);
+    border-radius: 4px;
+}
+
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media screen and (max-width: 1080px) {
+    .wfeb-reg-v1__panel {
+        width: 440px;
+        min-width: 440px;
+    }
+
+    .wfeb-reg-v1__main {
+        margin-left: 440px;
+    }
+
+    .wfeb-reg-v1__panel-inner {
+        padding: 40px 32px;
+    }
+
+    .wfeb-reg-v1__headline {
+        font-size: 1.6rem;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .wfeb-reg-v1 {
+        flex-direction: column;
+    }
+
+    .wfeb-reg-v1__panel {
+        position: relative;
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+
+    .wfeb-reg-v1__main {
+        margin-left: 0;
+    }
+
+    .wfeb-reg-v1__panel-inner {
+        padding: 36px 24px;
+        gap: 0;
+    }
+
+    .wfeb-reg-v1__logo {
+        display: block;
+        margin: 0 auto;
+    }
+
+    .wfeb-reg-v1__form-wrap{
+        margin: 0;
+    }
+
+    .wfeb-reg-v1__headline {
+        font-size: 1.45rem;
+        text-align: center;
+    }
+
+    .wfeb-reg-v1__tagline {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    .wfeb-reg-v1__benefits {
+        margin-bottom: 24px;
+    }
+
+    .wfeb-reg-v1__quote {
+        margin-bottom: 24px;
+    }
+
+    .wfeb-reg-v1__mobile-logo {
+        display: none;
+    }
+
+    .wfeb-reg-v1__form-wrap {
+        padding: 32px 24px 48px;
+    }
+
+    .wfeb-reg-v1__form-header {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .wfeb-reg-v1__panel-inner {
+        padding: 28px 20px;
+    }
+
+    .wfeb-reg-v1__headline {
+        font-size: 1.25rem;
+    }
+
+    .wfeb-reg-v1__benefits li {
+        font-size: 0.82rem;
+    }
+
+    .wfeb-reg-v1__trust-number {
+        font-size: 1.1rem;
+    }
+
+    .wfeb-reg-v1__form-wrap {
+        padding: 16px;
+    }
+
+    .wfeb-reg-v1__form-card {
+        padding: 24px 20px 28px;
+        border-radius: 12px;
+    }
+
+    .wfeb-reg-v1__form-title {
+        font-size: 1.3rem;
+    }
+
+    .wfeb-reg-v1 .wfeb-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .wfeb-reg-v1__agreements {
+        padding: 16px 16px 0;
+    }
+
+    .wfeb-reg-v1__mobile-logo img {
+        height: 42px;
+        margin: 0 auto;
+        display: block;
+    }
+}
