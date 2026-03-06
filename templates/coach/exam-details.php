@@ -281,26 +281,46 @@ foreach ( $categories as $cat ) {
 					<span class="wfeb-detail-label"><?php echo esc_html__( 'Issued', 'wfeb' ); ?></span>
 					<span class="wfeb-detail-value"><?php echo esc_html( wfeb_format_date( $certificate->issued_at, 'j M Y, g:i A' ) ); ?></span>
 				</div>
-				<?php if ( ! empty( $certificate->pdf_url ) ) : ?>
-					<div class="wfeb-detail-item">
-						<span class="wfeb-detail-label"><?php echo esc_html__( 'Download', 'wfeb' ); ?></span>
-						<span class="wfeb-detail-value">
-							<a href="<?php echo esc_url( $certificate->pdf_url ); ?>" class="wfeb-btn wfeb-btn--sm wfeb-btn--primary" target="_blank" rel="noopener noreferrer">
-								<span class="dashicons dashicons-download"></span>
-								<?php echo esc_html__( 'Download Certificate', 'wfeb' ); ?>
-							</a>
-							<?php if ( ! empty( $certificate->score_report_url ) ) : ?>
-								<a href="<?php echo esc_url( $certificate->score_report_url ); ?>" class="wfeb-btn wfeb-btn--sm wfeb-btn--primary" target="_blank" rel="noopener noreferrer" style="margin-left: 6px;">
-									<span class="dashicons dashicons-chart-area"></span>
-									<?php echo esc_html__( 'Score Report', 'wfeb' ); ?>
-								</a>
-							<?php endif; ?>
-						</span>
-					</div>
-				<?php endif; ?>
 			</div>
 		</div>
 	</div>
+
+	<?php if ( ! empty( $certificate->pdf_url ) ) : ?>
+		<!-- Download Certificate Card -->
+		<div class="wfeb-card">
+			<div class="wfeb-card-header">
+				<h3 class="wfeb-card-title">
+					<span class="dashicons dashicons-download"></span>
+					<?php echo esc_html__( 'Download Certificate', 'wfeb' ); ?>
+				</h3>
+			</div>
+			<div class="wfeb-card-body" style="text-align: center;">
+				<a href="<?php echo esc_url( $certificate->pdf_url ); ?>" class="wfeb-btn wfeb-btn--primary wfeb-btn--lg" target="_blank" rel="noopener noreferrer">
+					<span class="dashicons dashicons-download"></span>
+					<?php echo esc_html__( 'Download Certificate', 'wfeb' ); ?>
+				</a>
+			</div>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $certificate->score_report_url ) ) : ?>
+		<!-- Score Report Card -->
+		<div class="wfeb-card">
+			<div class="wfeb-card-header">
+				<h3 class="wfeb-card-title">
+					<span class="dashicons dashicons-chart-area"></span>
+					<?php echo esc_html__( 'Score Report', 'wfeb' ); ?>
+				</h3>
+			</div>
+			<div class="wfeb-card-body" style="text-align: center;">
+				<a href="<?php echo esc_url( $certificate->score_report_url ); ?>" class="wfeb-btn wfeb-btn--primary wfeb-btn--lg" target="_blank" rel="noopener noreferrer">
+					<span class="dashicons dashicons-chart-area"></span>
+					<?php echo esc_html__( 'Download Score Report', 'wfeb' ); ?>
+				</a>
+			</div>
+		</div>
+	<?php endif; ?>
+
 <?php endif; ?>
 
 <?php if ( ! empty( $exam->notes ) ) : ?>

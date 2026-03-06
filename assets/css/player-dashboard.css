@@ -2551,16 +2551,24 @@ body.wfeb-dashboard-page select:focus {
 }
 
 /* Prominent download PDF button */
+.wfeb-cert-detail-downloads {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 0;
+    margin-top: 16px;
+}
+
+.wfeb-cert-detail-downloads .wfeb-card {
+    margin-bottom: 0;
+}
+
 .wfeb-cert-detail-actions {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    padding: 24px;
-    background-color: var(--wfeb-card-bg);
-    border: 1px solid var(--wfeb-border);
-    border-top: none;
-    border-radius: 0 0 var(--wfeb-radius) var(--wfeb-radius);
+    padding: 24px 0;
 }
 
 .wfeb-btn--download {
@@ -3049,8 +3057,12 @@ body.wfeb-dashboard-page select:focus {
         font-size: 28px;
     }
 
+    .wfeb-cert-detail-downloads {
+        grid-template-columns: 1fr;
+    }
+
     .wfeb-cert-detail-actions {
-        padding: 16px;
+        padding: 16px 0;
         flex-direction: column;
     }
 
