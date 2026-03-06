@@ -112,7 +112,17 @@ class WFEB_PDF {
 		$exam_date       = isset( $certificate->exam_date ) ? esc_html( wfeb_format_date( $certificate->exam_date, 'j F Y' ) ) : '';
 		$coach_name      = isset( $certificate->coach_name ) ? esc_html( $certificate->coach_name ) : '';
 		$issued_at       = isset( $certificate->issued_at ) ? esc_html( wfeb_format_date( $certificate->issued_at, 'j F Y' ) ) : '';
-		$authoriser_name = esc_html( get_option( 'wfeb_cert_authoriser_name', get_option( 'wfeb_authoriser_name', 'WFEB Board' ) ) );
+		$authoriser_raw  = get_option( 'wfeb_cert_authoriser_name', '' );
+		if ( empty( $authoriser_raw ) ) {
+			$authoriser_raw = get_option( 'wfeb_authoriser_name', '' );
+		}
+		if ( empty( $authoriser_raw ) ) {
+			$authoriser_raw = $coach_name;
+		}
+		if ( empty( $authoriser_raw ) ) {
+			$authoriser_raw = 'WFEB Board';
+		}
+		$authoriser_name = esc_html( $authoriser_raw );
 
 		// Get level-specific styles.
 		$level_styles = $this->get_level_styles( $achievement );
