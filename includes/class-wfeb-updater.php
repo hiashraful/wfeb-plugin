@@ -289,8 +289,21 @@ class WFEB_Updater {
 
 		global $wp_filesystem;
 
-		$proper_destination = WP_PLUGIN_DIR . '/' . dirname( $this->plugin_slug );
-		$wp_filesystem->move( $result['destination'], $proper_destination );
+		$plugin_dir_name    = dirname( $this->plugin_slug );
+		$proper_destination = WP_PLUGIN_DIR . '/' . $plugin_dir_name;
+
+		// If the source is already in the right place, skip the move.
+		$source = rtrim( $result['destination'], '/' );
+		if ( $source === rtrim( $proper_destination, '/' ) ) {
+			return $result;
+		}
+
+		// Remove existing plugin directory so move() succeeds.
+		if ( $wp_filesystem->exists( $proper_destination ) ) {
+			$wp_filesystem->delete( $proper_destination, true );
+		}
+
+		$wp_filesystem->move( $source, $proper_destination );
 		$result['destination'] = $proper_destination;
 
 		// Re-activate if it was active.
