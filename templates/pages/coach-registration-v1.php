@@ -43,8 +43,8 @@ $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo esc_html__( 'Register as an Examiner - WFEB', 'wfeb' ); ?></title>
 	<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="<?php echo esc_url( $css_url ); ?>?ver=<?php echo esc_attr( WWFEB_VERSION ); ?>">
-	<link rel="stylesheet" href="<?php echo esc_url( $v1_css ); ?>?ver=<?php echo esc_attr( WWFEB_VERSION ); ?>">
+	<link rel="stylesheet" href="<?php echo esc_url( $css_url ); ?>?ver=<?php echo esc_attr( WFEB_VERSION ); ?>">
+	<link rel="stylesheet" href="<?php echo esc_url( $v1_css ); ?>?ver=<?php echo esc_attr( WFEB_VERSION ); ?>">
 	<?php wp_head(); ?>
 </head>
 <body class="wfeb-page wfeb-reg-v1-body">
