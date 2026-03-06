@@ -289,6 +289,12 @@ foreach ( $categories as $cat ) {
 								<span class="dashicons dashicons-download"></span>
 								<?php echo esc_html__( 'Download Certificate', 'wfeb' ); ?>
 							</a>
+							<?php if ( ! empty( $certificate->score_report_url ) ) : ?>
+								<a href="<?php echo esc_url( $certificate->score_report_url ); ?>" class="wfeb-btn wfeb-btn--sm wfeb-btn--primary" target="_blank" rel="noopener noreferrer" style="margin-left: 6px;">
+									<span class="dashicons dashicons-chart-area"></span>
+									<?php echo esc_html__( 'Score Report', 'wfeb' ); ?>
+								</a>
+							<?php endif; ?>
 						</span>
 					</div>
 				<?php endif; ?>

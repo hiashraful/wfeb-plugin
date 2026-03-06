@@ -2,10 +2,10 @@
 /**
  * Template: Coach Registration - V1 (A/B Test Variant)
  *
- * Split-screen layout with FEB-branded left panel and registration form on the right.
+ * Split-screen layout with WFEB-branded left panel and registration form on the right.
  * Standalone full-page template that bypasses the WordPress theme.
  *
- * @package WFEB
+ * @package WWFEB
  * @since   2.2.3
  */
 
@@ -29,10 +29,10 @@ if ( $coach_login_page_id ) {
 	$coach_login_url = get_permalink( $coach_login_page_id );
 }
 
-$logo_url  = WFEB_PLUGIN_URL . 'assets/images/LOGO TRANSPARENT.png';
-$css_url   = WFEB_PLUGIN_URL . 'assets/css/frontend.css';
-$v1_css    = WFEB_PLUGIN_URL . 'assets/css/registration-v1.css';
-$js_url    = WFEB_PLUGIN_URL . 'assets/js/frontend.js';
+$logo_url  = WWFEB_PLUGIN_URL . 'assets/images/LOGO TRANSPARENT.png';
+$css_url   = WWFEB_PLUGIN_URL . 'assets/css/frontend.css';
+$v1_css    = WWFEB_PLUGIN_URL . 'assets/css/registration-v1.css';
+$js_url    = WWFEB_PLUGIN_URL . 'assets/js/frontend.js';
 $ajax_url  = admin_url( 'admin-ajax.php' );
 $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 ?>
@@ -41,10 +41,10 @@ $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php echo esc_html__( 'Register as an Examiner - FEB', 'wfeb' ); ?></title>
+	<title><?php echo esc_html__( 'Register as an Examiner - WFEB', 'wfeb' ); ?></title>
 	<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="<?php echo esc_url( $css_url ); ?>?ver=<?php echo esc_attr( WFEB_VERSION ); ?>">
-	<link rel="stylesheet" href="<?php echo esc_url( $v1_css ); ?>?ver=<?php echo esc_attr( WFEB_VERSION ); ?>">
+	<link rel="stylesheet" href="<?php echo esc_url( $css_url ); ?>?ver=<?php echo esc_attr( WWFEB_VERSION ); ?>">
+	<link rel="stylesheet" href="<?php echo esc_url( $v1_css ); ?>?ver=<?php echo esc_attr( WWFEB_VERSION ); ?>">
 	<?php wp_head(); ?>
 </head>
 <body class="wfeb-page wfeb-reg-v1-body">
@@ -60,12 +60,12 @@ $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 
 				<!-- Logo -->
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="wfeb-reg-v1__logo">
-					<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr__( 'FEB Logo', 'wfeb' ); ?>">
+					<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr__( 'WFEB Logo', 'wfeb' ); ?>">
 				</a>
 
 				<!-- Headline -->
 				<h1 class="wfeb-reg-v1__headline">
-					<?php echo esc_html__( 'Become a certified FEB examiner', 'wfeb' ); ?>
+					<?php echo esc_html__( 'Become a certified WFEB examiner', 'wfeb' ); ?>
 				</h1>
 				<p class="wfeb-reg-v1__tagline">
 					<?php echo esc_html__( 'Run official football skills exams, issue certificates to players, and build your coaching profile.', 'wfeb' ); ?>
@@ -89,7 +89,7 @@ $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 						<span class="wfeb-reg-v1__benefit-icon">
 							<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
 						</span>
-						<span><?php echo esc_html__( 'Results saved on the FEB database for verification', 'wfeb' ); ?></span>
+						<span><?php echo esc_html__( 'Results saved on the WFEB database for verification', 'wfeb' ); ?></span>
 					</li>
 					<li>
 						<span class="wfeb-reg-v1__benefit-icon">
@@ -101,7 +101,7 @@ $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 
 				<!-- Testimonial -->
 				<blockquote class="wfeb-reg-v1__quote">
-					<p><?php echo esc_html__( '"I use the FEB tests to focus my players and give them individual targets."', 'wfeb' ); ?></p>
+					<p><?php echo esc_html__( '"I use the WFEB tests to focus my players and give them individual targets."', 'wfeb' ); ?></p>
 					<footer>
 						<strong><?php echo esc_html__( 'Sarah', 'wfeb' ); ?></strong>
 						<span><?php echo esc_html__( 'Club Coach', 'wfeb' ); ?></span>
@@ -145,7 +145,7 @@ $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 
 				<!-- Mobile logo (hidden on desktop) -->
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="wfeb-reg-v1__mobile-logo">
-					<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr__( 'FEB Logo', 'wfeb' ); ?>">
+					<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr__( 'WFEB Logo', 'wfeb' ); ?>">
 				</a>
 
 				<div class="wfeb-reg-v1__form-card">
@@ -298,7 +298,7 @@ $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 								<input type="checkbox" id="wfeb-reg-terms" name="terms" value="1" required>
 								<span class="wfeb-checkbox-mark"></span>
 								<span class="wfeb-checkbox-label">
-									<?php echo esc_html__( 'I agree that my name will appear on certificates permanently and consent to FEB storing my contact details.', 'wfeb' ); ?>
+									<?php echo esc_html__( 'I agree that my name will appear on certificates permanently and consent to WFEB storing my contact details.', 'wfeb' ); ?>
 								</span>
 							</label>
 						</div>

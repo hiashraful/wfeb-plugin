@@ -122,6 +122,13 @@ class WFEB_PDF {
 		$custom_bg      = get_option( 'wfeb_cert_background', '' );
 		$background_url = ! empty( $custom_bg ) ? $custom_bg : WFEB_PLUGIN_URL . 'assets/images/certificate of ability.png';
 
+		// Generate QR code for verification.
+		$qr_svg = '';
+		if ( isset( $certificate->player_name, $certificate->player_dob ) && class_exists( 'WFEB_QR' ) ) {
+			$verify_url = WFEB()->certificate->get_verification_url( $certificate );
+			$qr_svg     = WFEB_QR::svg( $verify_url, 80 );
+		}
+
 		ob_start();
 		?>
 <!DOCTYPE html>
@@ -398,6 +405,17 @@ class WFEB_PDF {
 			margin-bottom: 2px;
 		}
 
+		.cert-footer-qr {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.cert-footer-qr svg {
+			width: 22mm;
+			height: 22mm;
+		}
+
 		/* Print button (hidden in print) */
 		.print-controls {
 			position: fixed;
@@ -482,6 +500,12 @@ class WFEB_PDF {
 					<div class="cert-signature-line"></div>
 					<p class="cert-footer-label">Examiner</p>
 				</div>
+				<?php if ( ! empty( $qr_svg ) ) : ?>
+				<div class="cert-footer-item cert-footer-qr">
+					<?php echo $qr_svg; ?>
+					<p class="cert-footer-label">Scan to Verify</p>
+				</div>
+				<?php endif; ?>
 				<div class="cert-footer-item">
 					<p class="cert-footer-value"><?php echo $authoriser_name; ?></p>
 					<div class="cert-signature-line"></div>
@@ -721,5 +745,476 @@ class WFEB_PDF {
 		wp_update_attachment_metadata( $attachment_id, $attach_data );
 
 		return $attachment_id;
+	}
+
+	/**
+	 * Generate a score report HTML file for a certificate.
+	 *
+	 * Creates a self-contained A4 portrait HTML page with an SVG radar
+	 * chart and 7-category score breakdown bars. Print-ready with
+	 * @media print CSS.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param object $certificate The certificate object with joined data.
+	 * @param object $exam        The full exam object with individual category scores.
+	 * @return array|WP_Error Array with 'url' and 'attachment_id' on success, WP_Error on failure.
+	 */
+	public function generate_score_report( $certificate, $exam ) {
+		if ( empty( $certificate ) || empty( $exam ) ) {
+			return new WP_Error( 'invalid_data', __( 'Invalid certificate or exam data.', 'wfeb' ) );
+		}
+
+		$html = $this->get_score_report_html( $certificate, $exam );
+
+		if ( empty( $html ) ) {
+			return new WP_Error( 'html_generation_failed', __( 'Failed to generate score report HTML.', 'wfeb' ) );
+		}
+
+		$upload_path = $this->get_upload_path();
+
+		if ( is_wp_error( $upload_path ) ) {
+			return $upload_path;
+		}
+
+		$filename = sanitize_file_name( 'score-report-' . $certificate->certificate_number . '.html' );
+		$filepath = trailingslashit( $upload_path ) . $filename;
+
+		$written = file_put_contents( $filepath, $html ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+
+		if ( false === $written ) {
+			return new WP_Error( 'file_write_failed', __( 'Failed to write score report file.', 'wfeb' ) );
+		}
+
+		$upload_dir = wp_upload_dir();
+		$file_url   = trailingslashit( $upload_dir['baseurl'] ) . $this->upload_dir . '/' . $filename;
+
+		$attachment_id = $this->create_attachment( $filepath, $file_url, $certificate );
+
+		if ( is_wp_error( $attachment_id ) ) {
+			return $attachment_id;
+		}
+
+		wfeb_log( 'Score report generated - cert: ' . $certificate->certificate_number );
+
+		return array(
+			'url'           => $file_url,
+			'attachment_id' => $attachment_id,
+		);
+	}
+
+	/**
+	 * Generate the HTML content for a score report.
+	 *
+	 * @since  2.4.0
+	 * @access private
+	 *
+	 * @param object $certificate The certificate object.
+	 * @param object $exam        The exam object with category scores.
+	 * @return string The complete HTML document.
+	 */
+	private function get_score_report_html( $certificate, $exam ) {
+		$player_name   = isset( $certificate->player_name ) ? esc_html( $certificate->player_name ) : '';
+		$cert_number   = isset( $certificate->certificate_number ) ? esc_html( $certificate->certificate_number ) : '';
+		$achievement   = isset( $certificate->achievement_level ) ? esc_html( $certificate->achievement_level ) : '';
+		$total_score   = isset( $certificate->total_score ) ? absint( $certificate->total_score ) : 0;
+		$exam_date     = isset( $certificate->exam_date ) ? esc_html( wfeb_format_date( $certificate->exam_date, 'j F Y' ) ) : '';
+		$coach_name    = isset( $certificate->coach_name ) ? esc_html( $certificate->coach_name ) : '';
+		$level_styles  = $this->get_level_styles( $achievement );
+		$logo_url      = WFEB_PLUGIN_URL . 'assets/images/LOGO TRANSPARENT.png';
+
+		$categories = array(
+			array( 'label' => 'Short Passing', 'score' => absint( $exam->short_passing_total ), 'max' => 10 ),
+			array( 'label' => 'Long Passing',  'score' => absint( $exam->long_passing_total ),  'max' => 10 ),
+			array( 'label' => 'Shooting',      'score' => absint( $exam->shooting_total ),      'max' => 20 ),
+			array( 'label' => 'Sprinting',     'score' => absint( $exam->sprint_score ),        'max' => 10 ),
+			array( 'label' => 'Dribbling',     'score' => absint( $exam->dribble_score ),       'max' => 10 ),
+			array( 'label' => 'Kick Ups',      'score' => absint( $exam->kickups_score ),       'max' => 10 ),
+			array( 'label' => 'Volley',        'score' => absint( $exam->volley_total ),        'max' => 10 ),
+		);
+
+		$radar_svg = $this->generate_radar_svg( $categories );
+
+		// Build score bars HTML.
+		$bars_html = '';
+		foreach ( $categories as $cat ) {
+			$pct = $cat['max'] > 0 ? ( $cat['score'] / $cat['max'] ) * 100 : 0;
+
+			if ( $pct >= 80 ) {
+				$bar_color = '#10b981';
+			} elseif ( $pct >= 60 ) {
+				$bar_color = '#14b8a6';
+			} elseif ( $pct >= 40 ) {
+				$bar_color = '#f59e0b';
+			} elseif ( $pct >= 20 ) {
+				$bar_color = '#f97316';
+			} else {
+				$bar_color = '#ef4444';
+			}
+
+			$bars_html .= '<div class="sr-bar">'
+				. '<span class="sr-bar-label">' . esc_html( $cat['label'] ) . '</span>'
+				. '<div class="sr-bar-track">'
+				. '<div class="sr-bar-fill" style="width:' . round( $pct ) . '%;background:' . $bar_color . ';"></div>'
+				. '</div>'
+				. '<span class="sr-bar-value">' . $cat['score'] . '/' . $cat['max'] . '</span>'
+				. '</div>';
+		}
+
+		$score_pct = $total_score > 0 ? round( ( $total_score / 80 ) * 100 ) : 0;
+
+		ob_start();
+		?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Score Report - <?php echo $cert_number; ?></title>
+	<style>
+		*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+		@page { size: A4 portrait; margin: 0; }
+
+		@media print {
+			html, body { width: 210mm; height: 297mm; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+			.sr-page { page-break-after: avoid; page-break-inside: avoid; box-shadow: none !important; }
+			.no-print { display: none !important; }
+		}
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			background: #f5f5f5;
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			min-height: 100vh;
+			padding: 20px;
+		}
+
+		@media print { body { background: #fff; padding: 0; } }
+
+		.sr-page {
+			width: 210mm;
+			min-height: 297mm;
+			background: #fff;
+			position: relative;
+			overflow: hidden;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+			padding: 15mm 18mm;
+		}
+
+		.sr-header {
+			text-align: center;
+			margin-bottom: 8mm;
+			padding-bottom: 6mm;
+			border-bottom: 2px solid <?php echo $level_styles['border_color']; ?>;
+		}
+
+		.sr-logo { height: 40px; margin-bottom: 6px; }
+
+		.sr-title {
+			font-size: 22px;
+			font-weight: 700;
+			letter-spacing: 3px;
+			text-transform: uppercase;
+			color: <?php echo $level_styles['primary_color']; ?>;
+			margin-bottom: 2px;
+		}
+
+		.sr-subtitle {
+			font-size: 11px;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			color: #666;
+		}
+
+		.sr-info-grid {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			gap: 12px;
+			margin-bottom: 8mm;
+			text-align: center;
+		}
+
+		.sr-info-item-label {
+			font-size: 9px;
+			letter-spacing: 1.5px;
+			text-transform: uppercase;
+			color: #999;
+			margin-bottom: 3px;
+		}
+
+		.sr-info-item-value {
+			font-size: 13px;
+			font-weight: 700;
+			color: #1a1a1a;
+		}
+
+		.sr-level-badge {
+			display: inline-block;
+			padding: 3px 14px;
+			font-size: 12px;
+			font-weight: 700;
+			letter-spacing: 2px;
+			text-transform: uppercase;
+			color: <?php echo $level_styles['badge_text']; ?>;
+			background: <?php echo $level_styles['badge_bg']; ?>;
+			border-radius: 4px;
+			border: 1px solid <?php echo $level_styles['badge_border']; ?>;
+		}
+
+		.sr-two-col {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 8mm;
+			margin-bottom: 8mm;
+		}
+
+		.sr-section-title {
+			font-size: 14px;
+			font-weight: 700;
+			color: #1a1a1a;
+			margin-bottom: 12px;
+			padding-bottom: 6px;
+			border-bottom: 1px solid #e2e8f0;
+		}
+
+		.sr-radar-wrap {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.sr-bar {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 10px;
+		}
+
+		.sr-bar-label {
+			width: 90px;
+			font-size: 11px;
+			font-weight: 600;
+			color: #334155;
+			flex-shrink: 0;
+		}
+
+		.sr-bar-track {
+			flex: 1;
+			height: 14px;
+			background: #f1f5f9;
+			border-radius: 7px;
+			overflow: hidden;
+		}
+
+		.sr-bar-fill {
+			height: 100%;
+			border-radius: 7px;
+			transition: none;
+		}
+
+		.sr-bar-value {
+			width: 40px;
+			font-size: 11px;
+			font-weight: 700;
+			color: #334155;
+			text-align: right;
+			flex-shrink: 0;
+		}
+
+		.sr-score-summary {
+			text-align: center;
+			padding: 6mm 0;
+			border-top: 1px solid #e2e8f0;
+		}
+
+		.sr-score-big {
+			font-size: 48px;
+			font-weight: 800;
+			color: <?php echo $level_styles['primary_color']; ?>;
+			line-height: 1;
+		}
+
+		.sr-score-big span {
+			font-size: 20px;
+			font-weight: 400;
+			color: #999;
+		}
+
+		.sr-score-pct {
+			font-size: 14px;
+			color: #666;
+			margin-top: 4px;
+		}
+
+		.sr-footer {
+			text-align: center;
+			font-size: 9px;
+			color: #999;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			margin-top: 6mm;
+			padding-top: 4mm;
+			border-top: 1px solid #e2e8f0;
+		}
+
+		.print-controls {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			z-index: 1000;
+		}
+
+		.btn-print {
+			display: inline-block;
+			padding: 10px 24px;
+			background: <?php echo $level_styles['primary_color']; ?>;
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+			font-size: 14px;
+			cursor: pointer;
+			font-family: inherit;
+		}
+
+		.btn-print:hover { opacity: 0.9; }
+	</style>
+</head>
+<body>
+	<div class="print-controls no-print">
+		<button class="btn-print" onclick="window.print();">Print / Save as PDF</button>
+	</div>
+
+	<div class="sr-page">
+		<div class="sr-header">
+			<img class="sr-logo" src="<?php echo esc_url( $logo_url ); ?>" alt="WFEB">
+			<h1 class="sr-title">Skills Score Report</h1>
+			<p class="sr-subtitle">World Football Examination Board</p>
+		</div>
+
+		<div class="sr-info-grid">
+			<div>
+				<div class="sr-info-item-label">Player</div>
+				<div class="sr-info-item-value"><?php echo $player_name; ?></div>
+			</div>
+			<div>
+				<div class="sr-info-item-label">Exam Date</div>
+				<div class="sr-info-item-value"><?php echo $exam_date; ?></div>
+			</div>
+			<div>
+				<div class="sr-info-item-label">Certificate</div>
+				<div class="sr-info-item-value"><?php echo $cert_number; ?></div>
+			</div>
+			<div>
+				<div class="sr-info-item-label">Achievement</div>
+				<div class="sr-info-item-value"><span class="sr-level-badge"><?php echo $achievement; ?></span></div>
+			</div>
+		</div>
+
+		<div class="sr-two-col">
+			<div>
+				<div class="sr-section-title">Skills Radar</div>
+				<div class="sr-radar-wrap">
+					<?php echo $radar_svg; ?>
+				</div>
+			</div>
+			<div>
+				<div class="sr-section-title">Score Breakdown</div>
+				<?php echo $bars_html; ?>
+			</div>
+		</div>
+
+		<div class="sr-score-summary">
+			<div class="sr-score-big"><?php echo $total_score; ?><span>/80</span></div>
+			<div class="sr-score-pct"><?php echo $score_pct; ?>% Overall Score</div>
+		</div>
+
+		<div class="sr-footer">
+			<?php echo $cert_number; ?> &bull; Examiner: <?php echo $coach_name; ?> &bull; World Football Examination Board
+		</div>
+	</div>
+</body>
+</html>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Generate an SVG radar chart for score categories.
+	 *
+	 * Produces a pure SVG heptagon radar chart with grid rings, axis lines,
+	 * data polygon, vertex dots, and labels. No JS required.
+	 *
+	 * @since  2.4.0
+	 * @access private
+	 *
+	 * @param array $categories Array of arrays with 'label', 'score', 'max' keys.
+	 * @return string The SVG markup.
+	 */
+	private function generate_radar_svg( $categories ) {
+		$cx         = 160;
+		$cy         = 160;
+		$radius     = 120;
+		$n          = count( $categories );
+		$angle_step = ( 2 * M_PI ) / $n;
+		$start      = -M_PI / 2;
+
+		// Grid rings.
+		$grid = '';
+		foreach ( array( 20, 40, 60, 80, 100 ) as $pct ) {
+			$r   = $radius * $pct / 100;
+			$pts = array();
+			for ( $i = 0; $i < $n; $i++ ) {
+				$a     = $start + $i * $angle_step;
+				$pts[] = round( $cx + $r * cos( $a ), 2 ) . ',' . round( $cy + $r * sin( $a ), 2 );
+			}
+			$grid .= '<polygon points="' . implode( ' ', $pts ) . '" fill="none" stroke="#e2e8f0" stroke-width="1"/>';
+		}
+
+		// Axis lines.
+		$axes = '';
+		for ( $i = 0; $i < $n; $i++ ) {
+			$a  = $start + $i * $angle_step;
+			$x2 = round( $cx + $radius * cos( $a ), 2 );
+			$y2 = round( $cy + $radius * sin( $a ), 2 );
+			$axes .= '<line x1="' . $cx . '" y1="' . $cy . '" x2="' . $x2 . '" y2="' . $y2 . '" stroke="#e2e8f0" stroke-width="1"/>';
+		}
+
+		// Data polygon + dots.
+		$data_pts = array();
+		$dots     = '';
+		foreach ( $categories as $i => $cat ) {
+			$pct = $cat['max'] > 0 ? ( $cat['score'] / $cat['max'] ) * 100 : 0;
+			$r   = $radius * $pct / 100;
+			$a   = $start + $i * $angle_step;
+			$x   = round( $cx + $r * cos( $a ), 2 );
+			$y   = round( $cy + $r * sin( $a ), 2 );
+			$data_pts[] = $x . ',' . $y;
+			$dots .= '<circle cx="' . $x . '" cy="' . $y . '" r="4" fill="rgba(16,185,129,1)" stroke="#fff" stroke-width="1.5"/>';
+		}
+		$data = '<polygon points="' . implode( ' ', $data_pts ) . '" fill="rgba(0,0,128,0.2)" stroke="rgba(16,185,129,1)" stroke-width="2"/>';
+
+		// Labels.
+		$labels       = '';
+		$label_radius = $radius + 24;
+		foreach ( $categories as $i => $cat ) {
+			$a      = $start + $i * $angle_step;
+			$x      = round( $cx + $label_radius * cos( $a ), 2 );
+			$y      = round( $cy + $label_radius * sin( $a ), 2 );
+			$cos_a  = cos( $a );
+			$anchor = 'middle';
+			if ( $cos_a < -0.1 ) {
+				$anchor = 'end';
+			} elseif ( $cos_a > 0.1 ) {
+				$anchor = 'start';
+			}
+			$labels .= '<text x="' . $x . '" y="' . $y . '" text-anchor="' . $anchor . '" dominant-baseline="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" font-weight="600" fill="#334155">' . esc_html( $cat['label'] ) . '</text>';
+		}
+
+		return '<svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" style="max-width:280px;width:100%;height:auto;">'
+			. $grid . $axes . $data . $dots . $labels
+			. '</svg>';
 	}
 }

@@ -726,6 +726,47 @@
         });
 
         // =====================================================================
+        // REGENERATE CERTIFICATES
+        // =====================================================================
+
+        $('#wfeb-regenerate-certs-btn').on('click', function () {
+            var $btn = $(this);
+            var $status = $('#wfeb-regenerate-certs-status');
+
+            if (!confirm('This will regenerate ALL certificate files with QR codes and create score reports. Continue?')) {
+                return;
+            }
+
+            setLoading($btn, true);
+            $status.text('Processing...').css('color', '#666');
+
+            $.ajax({
+                url: wfeb_admin.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'wfeb_regenerate_certificates',
+                    security: $('#wfeb_admin_nonce').val() || wfeb_admin.nonce
+                },
+                success: function (response) {
+                    setLoading($btn, false);
+                    if (response.success) {
+                        $status.text(response.data.message).css('color', '#10b981');
+                        showAdminNotice(response.data.message, 'success');
+                    } else {
+                        $status.text(response.data.message || 'Failed.').css('color', '#ef4444');
+                        showAdminNotice(response.data.message || 'Failed to regenerate certificates.', 'error');
+                    }
+                },
+                error: function () {
+                    setLoading($btn, false);
+                    $status.text('An error occurred.').css('color', '#ef4444');
+                    showAdminNotice('An error occurred. Please try again.', 'error');
+                },
+                timeout: 300000 // 5 minutes - regeneration can take time.
+            });
+        });
+
+        // =====================================================================
         // ADMIN NOTICE HELPER
         // =====================================================================
 

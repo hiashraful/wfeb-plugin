@@ -20,6 +20,10 @@ $js_url      = WFEB_PLUGIN_URL . 'assets/js/frontend.js';
 $ajax_url    = admin_url( 'admin-ajax.php' );
 $nonce       = wp_create_nonce( 'wfeb_frontend_nonce' );
 $home_url    = home_url( '/' );
+
+// QR auto-verify params.
+$auto_cert = isset( $_GET['cert'] ) ? sanitize_text_field( wp_unslash( $_GET['cert'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+$auto_sig  = isset( $_GET['sig'] ) ? sanitize_text_field( wp_unslash( $_GET['sig'] ) ) : '';   // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -161,6 +165,17 @@ $home_url    = home_url( '/' );
 		</div>
 
 	</div><!-- .wfeb-verify-container -->
+
+	<?php if ( ! empty( $auto_cert ) && ! empty( $auto_sig ) ) : ?>
+	<script>
+	var wfebAutoVerify = {
+		cert: <?php echo wp_json_encode( $auto_cert ); ?>,
+		sig: <?php echo wp_json_encode( $auto_sig ); ?>,
+		ajax_url: <?php echo wp_json_encode( $ajax_url ); ?>,
+		nonce: <?php echo wp_json_encode( $nonce ); ?>
+	};
+	</script>
+	<?php endif; ?>
 
 	<?php wp_footer(); ?>
 </body>

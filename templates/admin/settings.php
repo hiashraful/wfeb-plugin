@@ -513,6 +513,17 @@ $base_url = admin_url( 'admin.php?page=wfeb-settings' );
 							</p>
 						</div>
 
+						<div class="wfeb-form-row">
+							<label class="wfeb-form-label" data-tooltip="Regenerates all existing certificate files with QR verification codes and creates score reports"><?php esc_html_e( 'Regenerate Certificates', 'wfeb' ); ?></label>
+							<button type="button" id="wfeb-regenerate-certs-btn" class="wfeb-btn wfeb-btn--sm wfeb-btn--warning">
+								<?php esc_html_e( 'Regenerate All Certificates', 'wfeb' ); ?>
+							</button>
+							<span id="wfeb-regenerate-certs-status"></span>
+							<p class="wfeb-form-description">
+								<?php esc_html_e( 'Regenerates all certificate HTML files with QR verification codes and generates score reports. Run this once after updating to add QR codes to existing certificates.', 'wfeb' ); ?>
+							</p>
+						</div>
+
 					</div>
 				</div>
 

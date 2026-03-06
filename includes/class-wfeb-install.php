@@ -238,6 +238,8 @@ class WFEB_Install {
             playing_level varchar(50) NOT NULL DEFAULT '',
             pdf_url varchar(500) NOT NULL DEFAULT '',
             pdf_attachment_id bigint(20) unsigned DEFAULT NULL,
+            score_report_url varchar(500) NOT NULL DEFAULT '',
+            score_report_attachment_id bigint(20) unsigned DEFAULT NULL,
             status varchar(20) NOT NULL DEFAULT 'active',
             revoke_reason text DEFAULT NULL,
             issued_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

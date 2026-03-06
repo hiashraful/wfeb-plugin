@@ -526,6 +526,60 @@
         });
 
         // =====================================================================
+        // 5b. QR AUTO-VERIFY
+        // =====================================================================
+
+        if (typeof wfebAutoVerify !== 'undefined' && wfebAutoVerify.cert && wfebAutoVerify.sig) {
+            (function () {
+                console.log('[WFEB] Auto-verifying certificate from QR code');
+
+                var $form       = $('#wfeb-verify-form');
+                var $resultsWrap = $('#wfeb-verify-results');
+                var $found      = $('#wfeb-verify-found');
+                var $notFound   = $('#wfeb-verify-not-found');
+
+                $form.hide();
+                $resultsWrap.show();
+
+                $.ajax({
+                    url: wfebAutoVerify.ajax_url,
+                    type: 'POST',
+                    data: {
+                        action: 'wfeb_verify_certificate',
+                        security: wfebAutoVerify.nonce,
+                        qr_cert: wfebAutoVerify.cert,
+                        qr_sig: wfebAutoVerify.sig
+                    },
+                    success: function (response) {
+                        if (response.success && response.data && response.data.data) {
+                            var certData = response.data.data;
+                            $found.show();
+                            $notFound.hide();
+
+                            $('#wfeb-result-name').text(certData.player_name || certData.name || '--');
+                            $('#wfeb-result-score').text(certData.total_score || certData.score || '--');
+                            $('#wfeb-result-date').text(certData.exam_date || certData.date || '--');
+                            $('#wfeb-result-cert').text(certData.certificate_number || certData.cert_number || '--');
+                            $('#wfeb-result-examiner').text(certData.examiner_name || certData.examiner || '--');
+
+                            var level = certData.achievement_level || certData.level || '';
+                            var $badge = $('#wfeb-result-badge');
+                            $badge.text(level);
+                            $badge.attr('class', 'wfeb-verify-badge wfeb-verify-badge--' + level.toLowerCase().replace(/[^a-z0-9]/g, ''));
+                        } else {
+                            $found.hide();
+                            $notFound.show();
+                        }
+                    },
+                    error: function () {
+                        $found.hide();
+                        $notFound.show();
+                    }
+                });
+            })();
+        }
+
+        // =====================================================================
         // 6. PASSWORD TOGGLE (Eye Icon)
         // =====================================================================
 

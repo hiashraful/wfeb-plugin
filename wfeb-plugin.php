@@ -3,7 +3,7 @@
  * Plugin Name: WFEB - World Football Examination Board
  * Plugin URI: https://devash.pro/
  * Description: Football skills certification marketplace. Coaches register, purchase certificate credits, conduct 7-category skills exams, and generate certificates for players.
- * Version: 2.2.9
+ * Version: 2.4.0
  * Author: Devash
  * Author URI: https://devash.pro
  * Text Domain: wfeb
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin constants
-define( 'WFEB_VERSION', '2.2.9' );
+define( 'WFEB_VERSION', '2.4.0' );
 define( 'WFEB_PLUGIN_FILE', __FILE__ );
 define( 'WFEB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WFEB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -115,12 +115,16 @@ final class WFEB_Plugin {
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-exam.php';
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-certificate.php';
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-pdf.php';
+        require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-qr.php';
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-ajax.php';
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-email.php';
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-shortcodes.php';
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-woocommerce.php';
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-coach-dashboard.php';
         require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-player-dashboard.php';
+
+        // Auto-updater (runs on admin + cron).
+        require_once WFEB_PLUGIN_DIR . 'includes/class-wfeb-updater.php';
 
         // Admin classes
         if ( is_admin() ) {
@@ -181,6 +185,7 @@ final class WFEB_Plugin {
 
         if ( is_admin() ) {
             new WFEB_Admin();
+            new WFEB_Updater();
         }
     }
 
@@ -346,9 +351,6 @@ final class WFEB_Plugin {
                 return WFEB_PLUGIN_DIR . 'templates/pages/coach-login.php';
             }
             if ( $page_id == $coach_register_id ) {
-                if ( isset( $_GET['v'] ) && '0' === $_GET['v'] ) {
-                    return WFEB_PLUGIN_DIR . 'templates/pages/coach-registration.php';
-                }
                 return WFEB_PLUGIN_DIR . 'templates/pages/coach-registration-v1.php';
             }
             if ( $page_id == $player_login_id ) {

@@ -176,7 +176,23 @@ class WFEB_Certificate {
 			array( '%d' )
 		);
 
-		// Refresh the certificate object with PDF data.
+		// Generate the score report.
+		$report_result = WFEB()->pdf->generate_score_report( $this->get( $cert_id ), $exam );
+
+		if ( ! is_wp_error( $report_result ) ) {
+			$wpdb->update(
+				$this->table,
+				array(
+					'score_report_url'           => esc_url_raw( $report_result['url'] ),
+					'score_report_attachment_id'  => absint( $report_result['attachment_id'] ),
+				),
+				array( 'id' => $cert_id ),
+				array( '%s', '%d' ),
+				array( '%d' )
+			);
+		}
+
+		// Refresh the certificate object with PDF + score report data.
 		$certificate = $this->get( $cert_id );
 
 		wfeb_log( 'Certificate generated successfully - cert_id: ' . $cert_id . ', number: ' . $cert_number . ', exam_id: ' . $exam_id );
@@ -676,6 +692,174 @@ class WFEB_Certificate {
 		}
 
 		return absint( $count );
+	}
+
+	/**
+	 * Get or create the verification secret key.
+	 *
+	 * @since  2.4.0
+	 * @access private
+	 *
+	 * @return string The secret key.
+	 */
+	private function get_verification_secret() {
+		$secret = get_option( 'wfeb_verification_secret' );
+
+		if ( empty( $secret ) ) {
+			$secret = wp_generate_password( 64, true, true );
+			update_option( 'wfeb_verification_secret', $secret, false );
+		}
+
+		return $secret;
+	}
+
+	/**
+	 * Generate a verification signature for a certificate.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $cert_number The certificate number.
+	 * @param string $player_name The player's full name.
+	 * @param string $dob         The player's date of birth (Y-m-d).
+	 * @return string 16-character hex signature.
+	 */
+	public function generate_verification_signature( $cert_number, $player_name, $dob ) {
+		$secret = $this->get_verification_secret();
+		$data   = strtolower( $cert_number . '|' . trim( $player_name ) . '|' . $dob );
+
+		return substr( hash_hmac( 'sha256', $data, $secret ), 0, 16 );
+	}
+
+	/**
+	 * Get the full verification URL for a certificate.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param object $certificate The certificate object with player_name and player_dob.
+	 * @return string The verification URL with cert and sig parameters.
+	 */
+	public function get_verification_url( $certificate ) {
+		$sig = $this->generate_verification_signature(
+			$certificate->certificate_number,
+			$certificate->player_name,
+			$certificate->player_dob
+		);
+
+		$verify_page_id = get_option( 'wfeb_verify_certificate_page_id' );
+		$base_url       = $verify_page_id ? get_permalink( $verify_page_id ) : home_url( '/verify-certificate/' );
+
+		return add_query_arg(
+			array(
+				'cert' => $certificate->certificate_number,
+				'sig'  => $sig,
+			),
+			$base_url
+		);
+	}
+
+	/**
+	 * Verify a certificate by its HMAC signature (QR scan flow).
+	 *
+	 * @since 2.4.0
+	 *
+	 * @param string $cert_number The certificate number from the QR URL.
+	 * @param string $sig         The 16-char hex signature from the QR URL.
+	 * @return array|WP_Error Verification result array on success, WP_Error on failure.
+	 */
+	public function verify_by_signature( $cert_number, $sig ) {
+		$certificate = $this->get_by_number( $cert_number );
+
+		if ( ! $certificate ) {
+			return new WP_Error( 'not_found', __( 'Certificate not found.', 'wfeb' ) );
+		}
+
+		if ( 'active' !== $certificate->status ) {
+			return new WP_Error( 'revoked', __( 'This certificate has been revoked.', 'wfeb' ) );
+		}
+
+		$expected = $this->generate_verification_signature(
+			$certificate->certificate_number,
+			$certificate->player_name,
+			$certificate->player_dob
+		);
+
+		if ( ! hash_equals( $expected, $sig ) ) {
+			wfeb_log( 'Certificate QR verification failed - signature mismatch for cert: ' . $cert_number );
+			return new WP_Error( 'invalid_signature', __( 'Invalid verification signature. This certificate link may have been tampered with.', 'wfeb' ) );
+		}
+
+		wfeb_log( 'Certificate verified via QR signature: ' . $cert_number );
+
+		return array(
+			'found'       => true,
+			'name'        => $certificate->player_name,
+			'score'       => $certificate->total_score,
+			'level'       => $certificate->achievement_level,
+			'date'        => $certificate->exam_date,
+			'cert_number' => $certificate->certificate_number,
+			'examiner'    => $certificate->coach_name,
+		);
+	}
+
+	/**
+	 * Regenerate all certificate files (HTML + score reports) with QR codes.
+	 *
+	 * @since 2.4.0
+	 *
+	 * @return int Number of certificates regenerated.
+	 */
+	public function regenerate_all_files() {
+		global $wpdb;
+
+		$all_certs = $this->get_all( array( 'limit' => 9999 ) );
+		$count     = 0;
+
+		foreach ( $all_certs as $cert ) {
+			$full_cert = $this->get( $cert->id );
+			$exam      = WFEB()->exam->get( $cert->exam_id );
+
+			if ( ! $full_cert || ! $exam ) {
+				continue;
+			}
+
+			// Regenerate certificate HTML (now with QR).
+			$pdf_result = WFEB()->pdf->generate_certificate( $full_cert );
+
+			if ( ! is_wp_error( $pdf_result ) ) {
+				$wpdb->update(
+					$this->table,
+					array(
+						'pdf_url'           => esc_url_raw( $pdf_result['url'] ),
+						'pdf_attachment_id'  => absint( $pdf_result['attachment_id'] ),
+					),
+					array( 'id' => $cert->id ),
+					array( '%s', '%d' ),
+					array( '%d' )
+				);
+			}
+
+			// Generate score report.
+			$report_result = WFEB()->pdf->generate_score_report( $full_cert, $exam );
+
+			if ( ! is_wp_error( $report_result ) ) {
+				$wpdb->update(
+					$this->table,
+					array(
+						'score_report_url'           => esc_url_raw( $report_result['url'] ),
+						'score_report_attachment_id'  => absint( $report_result['attachment_id'] ),
+					),
+					array( 'id' => $cert->id ),
+					array( '%s', '%d' ),
+					array( '%d' )
+				);
+			}
+
+			$count++;
+		}
+
+		wfeb_log( 'Regenerated ' . $count . ' certificate files with QR codes and score reports.' );
+
+		return $count;
 	}
 
 	/**

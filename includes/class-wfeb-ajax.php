@@ -99,6 +99,7 @@ class WFEB_Ajax {
 			'wfeb_get_analytics',
 			'wfeb_admin_delete_player',
 			'wfeb_send_test_email',
+			'wfeb_regenerate_certificates',
 		);
 
 		foreach ( $admin_actions as $action ) {
@@ -407,6 +408,24 @@ class WFEB_Ajax {
 	public function wfeb_verify_certificate() {
 		check_ajax_referer( 'wfeb_frontend_nonce', 'security' );
 
+		// QR signature-based verification (auto-verify from QR scan).
+		$qr_cert = isset( $_POST['qr_cert'] ) ? sanitize_text_field( wp_unslash( $_POST['qr_cert'] ) ) : '';
+		$qr_sig  = isset( $_POST['qr_sig'] ) ? sanitize_text_field( wp_unslash( $_POST['qr_sig'] ) ) : '';
+
+		if ( ! empty( $qr_cert ) && ! empty( $qr_sig ) ) {
+			$result = WFEB()->certificate->verify_by_signature( $qr_cert, $qr_sig );
+
+			if ( is_wp_error( $result ) ) {
+				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+			}
+
+			wp_send_json_success( array(
+				'message' => __( 'Certificate verified successfully.', 'wfeb' ),
+				'data'    => $result,
+			) );
+		}
+
+		// Standard form-based verification.
 		$name        = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
 		$cert_number = isset( $_POST['cert_number'] ) ? sanitize_text_field( wp_unslash( $_POST['cert_number'] ) ) : '';
 		$dob         = isset( $_POST['dob'] ) ? sanitize_text_field( wp_unslash( $_POST['dob'] ) ) : '';
@@ -2289,5 +2308,28 @@ class WFEB_Ajax {
 			wfeb_log( 'Test email failed via admin AJAX to: ' . $email );
 			wp_send_json_error( array( 'message' => __( 'wp_mail() returned false. Check your mail configuration.', 'wfeb' ) ) );
 		}
+	}
+
+	/**
+	 * Regenerate all certificate files with QR codes and score reports.
+	 *
+	 * @since 2.4.0
+	 */
+	public function wfeb_regenerate_certificates() {
+		check_ajax_referer( 'wfeb_admin_nonce', 'security' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'wfeb' ) ) );
+		}
+
+		$count = WFEB()->certificate->regenerate_all_files();
+
+		wp_send_json_success( array(
+			'message' => sprintf(
+				/* translators: %d: number of certificates */
+				__( 'Successfully regenerated %d certificate(s) with QR codes and score reports.', 'wfeb' ),
+				$count
+			),
+		) );
 	}
 }

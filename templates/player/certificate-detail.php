@@ -213,6 +213,12 @@ $level_lower = sanitize_title( $certificate->achievement_level );
 				<?php echo esc_html__( 'Download Certificate PDF', 'wfeb' ); ?>
 			</a>
 		<?php endif; ?>
+		<?php if ( ! empty( $certificate->score_report_url ) ) : ?>
+			<a href="<?php echo esc_url( $certificate->score_report_url ); ?>" class="wfeb-btn wfeb-btn--download wfeb-btn--lg" target="_blank" rel="noopener noreferrer">
+				<span class="dashicons dashicons-chart-area"></span>
+				<?php echo esc_html__( 'Download Score Report', 'wfeb' ); ?>
+			</a>
+		<?php endif; ?>
 		<a href="<?php echo esc_url( add_query_arg( 'section', 'certificates', $base_url ) ); ?>" class="wfeb-btn wfeb-btn--secondary">
 			<?php echo esc_html__( 'Back to Certificates', 'wfeb' ); ?>
 		</a>
