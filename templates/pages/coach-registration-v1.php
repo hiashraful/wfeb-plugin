@@ -29,10 +29,10 @@ if ( $coach_login_page_id ) {
 	$coach_login_url = get_permalink( $coach_login_page_id );
 }
 
-$logo_url  = WWFEB_PLUGIN_URL . 'assets/images/LOGO TRANSPARENT.png';
-$css_url   = WWFEB_PLUGIN_URL . 'assets/css/frontend.css';
-$v1_css    = WWFEB_PLUGIN_URL . 'assets/css/registration-v1.css';
-$js_url    = WWFEB_PLUGIN_URL . 'assets/js/frontend.js';
+$logo_url  = WFEB_PLUGIN_URL . 'assets/images/LOGO TRANSPARENT.png';
+$css_url   = WFEB_PLUGIN_URL . 'assets/css/frontend.css';
+$v1_css    = WFEB_PLUGIN_URL . 'assets/css/registration-v1.css';
+$js_url    = WFEB_PLUGIN_URL . 'assets/js/frontend.js';
 $ajax_url  = admin_url( 'admin-ajax.php' );
 $nonce     = wp_create_nonce( 'wfeb_frontend_nonce' );
 ?>
