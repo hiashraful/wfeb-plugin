@@ -54,7 +54,8 @@ class WFEB_WooCommerce {
 		add_filter( 'woocommerce_cart_needs_shipping', array( $this, 'credit_cart_needs_shipping' ) );
 
 		// Redirect to coach dashboard after successful credit purchase.
-		add_action( 'woocommerce_thankyou', array( $this, 'redirect_after_credit_purchase' ) );
+		add_filter( 'woocommerce_get_return_url', array( $this, 'filter_credit_return_url' ), 10, 2 );
+		add_action( 'template_redirect', array( $this, 'redirect_order_received_for_credits' ) );
 
 		// Auto-complete credit orders immediately (COD, Stripe, any gateway).
 		add_action( 'woocommerce_payment_complete', array( $this, 'auto_complete_credit_order' ) );
@@ -509,43 +510,101 @@ class WFEB_WooCommerce {
 	}
 
 	/**
-	 * Redirect coach to dashboard credits section after a successful credit purchase.
+	 * Filter the WooCommerce return URL for credit orders.
 	 *
-	 * Fires on the WooCommerce thank-you page. If the order contains the WFEB
-	 * credit product, immediately redirects to the coach dashboard credits section.
+	 * Changes the post-payment redirect destination so the payment gateway
+	 * sends the customer directly to the coach dashboard instead of the
+	 * order-received page. This fires before any output, so it works
+	 * reliably on all hosting environments.
 	 *
-	 * @param int $order_id The WooCommerce order ID.
+	 * @param string   $return_url The default return URL.
+	 * @param WC_Order $order      The order object.
+	 * @return string Modified return URL for credit orders.
+	 */
+	public function filter_credit_return_url( $return_url, $order ) {
+		if ( ! $order || ! is_a( $order, 'WC_Order' ) ) {
+			return $return_url;
+		}
+
+		if ( ! $this->order_has_credits( $order ) ) {
+			return $return_url;
+		}
+
+		$dashboard_url = $this->get_credits_dashboard_url();
+
+		return $dashboard_url ? $dashboard_url : $return_url;
+	}
+
+	/**
+	 * Redirect away from order-received page for credit orders.
+	 *
+	 * Safety net: if a customer somehow lands on the order-received endpoint
+	 * for a credit order (e.g. browser back, bookmark, gateway that ignores
+	 * return URL), redirect them before any output.
+	 *
 	 * @return void
 	 */
-	public function redirect_after_credit_purchase( $order_id ) {
+	public function redirect_order_received_for_credits() {
+		if ( ! function_exists( 'is_wc_endpoint_url' ) || ! is_wc_endpoint_url( 'order-received' ) ) {
+			return;
+		}
+
+		// Get order ID from the endpoint.
+		global $wp;
+		$order_id = absint( $wp->query_vars['order-received'] ?? 0 );
+
+		if ( ! $order_id ) {
+			return;
+		}
+
 		$order = wc_get_order( $order_id );
 
 		if ( ! $order ) {
 			return;
 		}
 
-		$has_credits = false;
-		foreach ( $order->get_items() as $item ) {
-			if ( $this->is_credit_product( $item->get_product_id() ) ) {
-				$has_credits = true;
-				break;
-			}
-		}
-
-		if ( ! $has_credits ) {
+		if ( ! $this->order_has_credits( $order ) ) {
 			return;
 		}
 
+		$dashboard_url = $this->get_credits_dashboard_url();
+
+		if ( ! $dashboard_url ) {
+			return;
+		}
+
+		wp_safe_redirect( $dashboard_url );
+		exit;
+	}
+
+	/**
+	 * Check whether a WooCommerce order contains the WFEB credit product.
+	 *
+	 * @param WC_Order $order The order to check.
+	 * @return bool
+	 */
+	private function order_has_credits( $order ) {
+		foreach ( $order->get_items() as $item ) {
+			if ( $this->is_credit_product( $item->get_product_id() ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Get the coach dashboard credits section URL.
+	 *
+	 * @return string|false The URL, or false if the dashboard page is not configured.
+	 */
+	private function get_credits_dashboard_url() {
 		$dashboard_page_id = get_option( 'wfeb_coach_dashboard_page_id' );
 
 		if ( ! $dashboard_page_id ) {
-			return;
+			return false;
 		}
 
-		$redirect_url = add_query_arg( 'section', 'credits', get_permalink( $dashboard_page_id ) );
-
-		wp_safe_redirect( $redirect_url );
-		exit;
+		return add_query_arg( 'section', 'buy-credits', get_permalink( $dashboard_page_id ) );
 	}
 
 	/**
