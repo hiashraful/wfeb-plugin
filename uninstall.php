@@ -3,11 +3,19 @@
  * WFEB Plugin Uninstall
  *
  * Fired when the plugin is deleted via WordPress admin.
- * Removes all plugin data: tables, options, roles, pages, uploaded files.
+ *
+ * SAFE MODE: Does NOT delete data by default.
+ * Data removal only happens if the admin explicitly enables it
+ * via Settings > General > "Delete all data on uninstall".
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     exit;
+}
+
+// Only delete data if the admin explicitly opted in.
+if ( get_option( 'wfeb_delete_data_on_uninstall' ) !== 'yes' ) {
+    return;
 }
 
 global $wpdb;
@@ -22,7 +30,7 @@ $tables = array(
 );
 
 foreach ( $tables as $table ) {
-    $wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+    $wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.DB.PreparedSQL
 }
 
 // Remove roles
@@ -73,6 +81,10 @@ $options = array(
     'wfeb_email_from_name',
     'wfeb_email_from_address',
     'wfeb_certificate_bg_id',
+    'wfeb_cert_background',
+    'wfeb_cert_authoriser_name',
+    'wfeb_verification_secret',
+    'wfeb_delete_data_on_uninstall',
 );
 
 foreach ( $options as $option ) {
@@ -87,25 +99,12 @@ $upload_dir = wp_upload_dir();
 $cert_dir = $upload_dir['basedir'] . '/wfeb-certificates';
 if ( is_dir( $cert_dir ) ) {
     $files = glob( $cert_dir . '/*' );
-    foreach ( $files as $file ) {
-        if ( is_file( $file ) ) {
-            unlink( $file );
+    if ( is_array( $files ) ) {
+        foreach ( $files as $file ) {
+            if ( is_file( $file ) ) {
+                unlink( $file );
+            }
         }
     }
     rmdir( $cert_dir );
-}
-
-// Delete users with wfeb roles (optional - only if no other roles)
-$coach_users = get_users( array( 'role' => 'wfeb_coach' ) );
-foreach ( $coach_users as $user ) {
-    if ( count( $user->roles ) === 1 ) {
-        wp_delete_user( $user->ID );
-    }
-}
-
-$player_users = get_users( array( 'role' => 'wfeb_player' ) );
-foreach ( $player_users as $user ) {
-    if ( count( $user->roles ) === 1 ) {
-        wp_delete_user( $user->ID );
-    }
 }
